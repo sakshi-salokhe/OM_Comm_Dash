@@ -57,7 +57,7 @@ class ViewTableRows extends Component
 		const condition2 = this.props.obj.id === null;
 		
 		return (
-				<tr style={{ backgroundColor: condition ? "#ff8080" : "white" }}>
+				<tr style={{ backgroundColor: condition ? "#FED2D2" : "white" }}>
 					<td>
 						{this.props.obj.comm_date}
 					</td>
