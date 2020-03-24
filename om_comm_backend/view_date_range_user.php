@@ -15,6 +15,33 @@ if(isset($postdata) && !empty($postdata))
 	$user_id = $_POST['user_id'];
 	$empl = $_POST['empl'];
 	
+	if(empty($_POST['start']) == True or $_POST['start'] == null)
+	{
+		$start = 0;
+	}
+	else
+	{
+		$start = $_POST['start'];
+	}
+	
+	if(empty($_POST['end']) == True or $_POST['end'] == null)
+	{
+		$end = 0;
+	}
+	else
+	{
+		$end = $_POST['end'];
+	}
+	
+	if(empty($_POST['user']) == True or $_POST['user'] == null)
+	{
+		$user = 0;
+	}
+	else
+	{
+		$user = $_POST['user'];
+	}
+	
 	if(empty($_POST['ctype']) == True or $_POST['ctype'] == null)
 	{
 		$ctype = 0;
@@ -33,23 +60,134 @@ if(isset($postdata) && !empty($postdata))
 		$order = $_POST['order'];
 	}
 	
-	if($ctype == 0 and $order == 'asc')
+	if($start == 0 and $end == 0 and $user == 0 and $ctype == 0 and $order == 'asc')
 	{
-		$sql = "select * from communications where emp_id = '$empl'";
+		$sql = "select * from communications where emp_id = '$empl' order by comm_date asc";
 	}
-	else if($ctype == 0 and $order == 'desc')
+	else if($start == 0 and $end == 0 and $user == 0 and $ctype == 0 and $order == 'desc')
 	{
-		$sql = "select * from communications where emp_id = '$empl' order by comm_date DESC";
+		$sql = "select * from communications where emp_id = '$empl' order by comm_date desc";
 	}
-	else if($ctype != 0 and $order == 'asc')
+	else if($start == 0 and $end == 0 and $user == 0 and $ctype != 0 and $order == 'asc')
 	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_type_id = '$ctype'";
+		$sql = "select * from communications where emp_id = '$empl' and comm_type_id = '$ctype' order by comm_date asc";
 	}
-	else
+	else if($start == 0 and $end == 0 and $user == 0 and $ctype != 0 and $order == 'desc')
 	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_type_id = '$ctype' order by comm_date DESC";
+		$sql = "select * from communications where emp_id = '$empl' and comm_type_id = '$ctype' order by comm_date desc";
 	}
-	
+	else if($start == 0 and $end == 0 and $user != 0 and $ctype == 0 and $order == 'asc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and user_id = '$user' order by comm_date asc";
+	}
+	else if($start == 0 and $end == 0 and $user != 0 and $ctype == 0 and $order == 'desc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and user_id = '$user' order by comm_date desc";
+	}
+	else if($start == 0 and $end == 0 and $user != 0 and $ctype != 0 and $order == 'asc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and comm_type_id = '$ctype' and user_id = '$user' order by comm_date asc";
+	}
+	else if($start == 0 and $end == 0 and $user != 0 and $ctype != 0 and $order == 'desc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and comm_type_id = '$ctype' and user_id = '$user' order by comm_date desc";
+	}
+	else if($start == 0 and $end != 0 and $user == 0 and $ctype == 0 and $order == 'asc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and comm_date <= '$end' order by comm_date asc";
+	}
+	else if($start == 0 and $end != 0 and $user == 0 and $ctype == 0 and $order == 'desc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and comm_date <= '$end' order by comm_date desc";
+	}
+	else if($start == 0 and $end != 0 and $user == 0 and $ctype != 0 and $order == 'asc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and comm_date <= '$end' and comm_type_id = '$ctype' order by comm_date asc";
+	}
+	else if($start == 0 and $end != 0 and $user == 0 and $ctype != 0 and $order == 'desc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and comm_date <= '$end' and comm_type_id = '$ctype' order by comm_date desc";
+	}
+	else if($start == 0 and $end != 0 and $user != 0 and $ctype == 0 and $order == 'asc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and comm_date <= '$end' and user_id = '$user' order by comm_date asc";
+	}
+	else if($start == 0 and $end != 0 and $user != 0 and $ctype == 0 and $order == 'desc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and comm_date <= '$end' and user_id = '$user' order by comm_date desc";
+	}
+	else if($start == 0 and $end != 0 and $user != 0 and $ctype != 0 and $order == 'asc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and comm_date <= '$end' and user_id = '$user' and comm_type_id = '$ctype' order by comm_date asc";
+	}
+	else if($start == 0 and $end != 0 and $user != 0 and $ctype != 0 and $order == 'desc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and comm_date <= '$end' and user_id = '$user' and comm_type_id = '$ctype' order by comm_date desc";
+	}
+	else if($start != 0 and $end == 0 and $user == 0 and $ctype == 0 and $order == 'asc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and comm_date >= '$start' order by comm_date asc";
+	}
+	else if($start != 0 and $end == 0 and $user == 0 and $ctype == 0 and $order == 'desc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and comm_date >= '$start' order by comm_date desc";
+	}
+	else if($start != 0 and $end == 0 and $user == 0 and $ctype != 0 and $order == 'asc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and comm_date >= '$start' and comm_type_id = '$ctype' order by comm_date asc";
+	}
+	else if($start != 0 and $end == 0 and $user == 0 and $ctype != 0 and $order == 'desc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and comm_date >= '$start' and comm_type_id = '$ctype' order by comm_date desc";
+	}
+	else if($start != 0 and $end == 0 and $user != 0 and $ctype == 0 and $order == 'asc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and comm_date >= '$start' and user_id = '$user' order by comm_date asc";
+	}
+	else if($start != 0 and $end == 0 and $user != 0 and $ctype == 0 and $order == 'desc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and comm_date >= '$start' and user_id = '$user' order by comm_date desc";
+	}
+	else if($start != 0 and $end == 0 and $user != 0 and $ctype != 0 and $order == 'asc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and comm_date >= '$start' and user_id = '$user' and comm_type_id = '$ctype' order by comm_date asc";
+	}
+	else if($start != 0 and $end == 0 and $user != 0 and $ctype != 0 and $order == 'desc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and comm_date >= '$start' and user_id = '$user' and comm_type_id = '$ctype' order by comm_date desc";
+	}
+	else if($start != 0 and $end != 0 and $user == 0 and $ctype == 0 and $order == 'asc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and comm_date between '$start' and '$end' order by comm_date asc";
+	}
+	else if($start != 0 and $end != 0 and $user == 0 and $ctype == 0 and $order == 'desc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and comm_date between '$start' and '$end' order by comm_date desc";
+	}
+	else if($start != 0 and $end != 0 and $user == 0 and $ctype != 0 and $order == 'asc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and comm_type_id = '$ctype' and comm_date between '$start' and '$end' order by comm_date asc";
+	}
+	else if($start != 0 and $end != 0 and $user == 0 and $ctype != 0 and $order == 'desc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and comm_type_id = '$ctype' and comm_date between '$start' and '$end' order by comm_date desc";
+	}
+	else if($start != 0 and $end != 0 and $user != 0 and $ctype == 0 and $order == 'asc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and user_id = '$user' and comm_date between '$start' and '$end' order by comm_date asc";
+	}
+	else if($start != 0 and $end != 0 and $user != 0 and $ctype == 0 and $order == 'desc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and user_id = '$user' and comm_date between '$start' and '$end' order by comm_date desc";
+	}
+	else if($start != 0 and $end != 0 and $user != 0 and $ctype != 0 and $order == 'asc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and user_id = '$user' and comm_type_id = '$ctype' and comm_date between '$start' and '$end' order by comm_date asc";
+	}
+	else if($start != 0 and $end != 0 and $user != 0 and $ctype != 0 and $order == 'desc')
+	{
+		$sql = "select * from communications where emp_id = '$empl' and user_id = '$user' and comm_type_id = '$ctype' and comm_date between '$start' and '$end' order by comm_date desc";
+	}
 	
 	if($res = mysqli_query($con, $sql))
 	{
@@ -74,12 +212,15 @@ if(isset($postdata) && !empty($postdata))
 		
 			$emp_q = "select emp_name from employers where emp_id = '$empid1'";
 			$ctype_q = "select comm_type_name from comm_type where comm_type_id = '$ctypeid1'";
+			$user11 = "select name from users where user_id = '$user'";
 			
 			$res1 = mysqli_query($con, $emp_q);
 			$res2 = mysqli_query($con, $ctype_q);
+			$res3 = mysqli_query($con, $user11);
 			
 			$row1 = mysqli_fetch_assoc($res1);
 			$row2 = mysqli_fetch_assoc($res2);
+			$row3 = mysqli_fetch_assoc($res3);
 			
 			
 			$emp[$c]['emp_name'] = $row1['emp_name'];
@@ -87,6 +228,7 @@ if(isset($postdata) && !empty($postdata))
 			
 			$emp[$c]['ctype'] = $ctype;
 			$emp[$c]['order'] = $order;
+			$emp[$c]['user'] = $row3['name'];
 			
 			$c++;
 		}
@@ -109,6 +251,7 @@ if(isset($postdata) && !empty($postdata))
 			$emp[$c]['ctype_name'] = "";
 			$emp[$c]['ctype'] = $ctype;
 			$emp[$c]['order'] = $order;
+			$emp[$c]['user'] = $user;
 			
 			echo json_encode($emp);
 		}
