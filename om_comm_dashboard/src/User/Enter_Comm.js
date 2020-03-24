@@ -20,7 +20,8 @@ class Enter_Comm extends Component
 			ctype: "",
 			notes: "",
 			file: "",
-			file11 : ""
+			file11 : "",
+			username : ""
 		};
 		
 		this.back = this.back.bind(this);
@@ -68,6 +69,14 @@ class Enter_Comm extends Component
 				c_type: resp.data
 			})
 			//console.log(resp.data);
+		})
+		
+		axios.get('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_username.php?user_id='+this.props.user_id)
+		.then(response => 
+		{
+            this.setState({
+				username: response.data.name
+			})
 		})
 	}
 	
@@ -154,8 +163,20 @@ class Enter_Comm extends Component
 						Occ Med Communication Dashboard
 					</b> </h1> </center>
 				</div>
-				
 				<br />
+				
+				<div className = "row">
+					<div className = "col-lg-7 col-md-7 col-sm-7 col-xs-7">
+						<h4> <b>
+							 Welcome {this.state.username}
+						</b> </h4>
+					</div>
+					<div className = "col-lg-5 col-md-5 col-sm-5 col-xs-5"> 
+					</div>
+					
+				</div>
+				<br />
+				
 				<div className = "row">
 					<div className = "col-lg-7 col-md-7 col-sm-7 col-xs-7">
 						<h4> <b> Enter New Communication</b> </h4>

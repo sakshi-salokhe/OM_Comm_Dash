@@ -23,7 +23,8 @@ class AdminLogin extends Component
 			empl: "",
 			user: "",
 			start: "",
-			end: ""
+			end: "",
+			username : ""
 		}
 		
 		this.changepass = this.changepass.bind(this)
@@ -109,6 +110,14 @@ class AdminLogin extends Component
 				users: response.data
 			})
 		})
+		
+		axios.get('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_username.php?user_id='+this.props.user_id)
+		.then(response => 
+		{
+            this.setState({
+				username: response.data.name
+			})
+		})
 	}
 	
 	changepass()
@@ -144,7 +153,9 @@ class AdminLogin extends Component
 				
 				<br />
 				<div className = "row">
-					<div className = "col-lg-7 col-md-7 col-sm-7 col-xs-7"> </div>
+					<div className = "col-lg-7 col-md-7 col-sm-7 col-xs-7"> 
+						<h4> <b> Welcome {this.state.username} </b> </h4>
+					</div>
 					<div className = "col-lg-5 col-md-5 col-sm-5 col-xs-5"> 
 						<button type="button" className="btn btn-success" onClick = {this.changepass}> &nbsp;&nbsp;&nbsp; Change Password &nbsp;&nbsp;&nbsp;</button>
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

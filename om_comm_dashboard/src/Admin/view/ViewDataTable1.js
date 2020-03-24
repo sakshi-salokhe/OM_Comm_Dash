@@ -21,7 +21,8 @@ class ViewDataTable1 extends Component
 			obj: [],
 			c_type : [],
 			ctype :"",
-			emp_name : ""
+			emp_name : "",
+			username : ""
 		};
 		
 		this.onChange = this.onChange.bind(this);
@@ -155,6 +156,14 @@ class ViewDataTable1 extends Component
 			});
 
 		})
+		
+		axios.get('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_username.php?user_id='+this.props.data.user_id)
+		.then(response => 
+		{
+            this.setState({
+				username: response.data.name
+			})
+		})
 	}
 	
 	commList()
@@ -180,6 +189,18 @@ class ViewDataTable1 extends Component
 						<center> <h1 style = {{color : "#33a5ff"}}> <b>
 							Occ Med Communication Dashboard
 						</b> </h1> </center>
+					</div>
+					
+					<br />
+					<div className = "row">
+						<div className = "col-lg-7 col-md-7 col-sm-7 col-xs-7">
+							<h4> <b>
+								 Welcome {this.state.username}
+							</b> </h4>
+						</div>
+						<div className = "col-lg-5 col-md-5 col-sm-5 col-xs-5"> 
+						</div>
+						
 					</div>
 					
 					<br />
