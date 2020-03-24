@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios'
 import qs from 'qs'
+import moment from 'moment'
 
 import Logout from '../MainPage/Logout'
 import ChangePass from '../MainPage/ChangePass'
@@ -17,8 +18,12 @@ class AdminLogin extends Component
 		this.state = 
 		{
 			emps: [],
+			users: [],
 			c_type : [],
 			empl: "",
+			user: "",
+			start: "",
+			end: ""
 		}
 		
 		this.changepass = this.changepass.bind(this)
@@ -42,6 +47,9 @@ class AdminLogin extends Component
 		const obj = {
 			user_id : this.props.user_id,
 			empl : this.state.empl,
+			user : this.state.user,
+			start : this.state.start,
+			end: this.state.end
 		}
 		
 		if(obj.empl.length === 0)
@@ -65,8 +73,11 @@ class AdminLogin extends Component
 		const obj = {
 			user_id : this.props.user_id,
 			empl : this.state.empl,
+			user : this.state.user,
+			start : this.state.start,
+			end: this.state.end
 		}
-		
+		//console.log("check: ", obj);
 		if(obj.empl.length === 0)
 		{
 			alert("Please choose an employer.");
@@ -90,6 +101,14 @@ class AdminLogin extends Component
 				emps: response.data
 			})
 		})
+		
+		axios.get('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_users.php')
+		.then(response => 
+		{
+            this.setState({
+				users: response.data
+			})
+		})
 	}
 	
 	changepass()
@@ -106,6 +125,10 @@ class AdminLogin extends Component
 	{
 		let optionItems = this.state.emps.map((emps1) =>
                 <option key={emps1.emp_id} value = {emps1.emp_id}>{emps1.emp_name}</option>
+            );
+			
+		let optionItems2 = this.state.users.map((users1) =>
+                <option key={users1.user_id} value = {users1.user_id}>{users1.name}</option>
             );
 			
 		return(
@@ -140,6 +163,23 @@ class AdminLogin extends Component
 								<label><b> Choose Employer </b> <br /></label>
 								<select className = "form-control" onChange = {this.onchange} name = "empl" value = {optionItems.emp_id}>
 									{optionItems}
+								</select>
+							</div>
+							
+							<div className="form-group">
+								<label><b> Start Date </b> (optional) <br /></label>
+								<input className = "form-control" type = "date" max={moment().format("YYYY-MM-DD")} value = {this.state.start} name = "start" onChange = {this.onchange} /> 
+							</div>
+							
+							<div className="form-group">
+								<label><b> End Date </b> (optional) <br /></label>
+								<input className = "form-control" type = "date" min={this.state.start} max={moment().format("YYYY-MM-DD")} value = {this.state.end} name = "end" onChange = {this.onchange} /> 
+							</div>
+							
+							<div className="form-group">
+								<label><b> Choose Users </b> (optional) <br /></label>
+								<select className = "form-control" onChange = {this.onchange} name = "user" value = {optionItems2.user_id}>
+									{optionItems2}
 								</select>
 							</div>
 							

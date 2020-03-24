@@ -47,7 +47,10 @@ class ViewDataTable extends Component
 			user_id : this.props.data.user_id,
 			empl : this.props.data.empl,
 			ctype : this.props.data.ctype,
-			order: 'asc'
+			order: 'asc',
+			user : this.props.data.user,
+			start : this.props.data.start,
+			end: this.props.data.end
 		}
 		
 		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_emp_name.php',qs.stringify(obj))
@@ -72,7 +75,10 @@ class ViewDataTable extends Component
 			user_id : this.props.data.user_id,
 			empl : this.props.data.empl,
 			ctype : this.props.data.ctype,
-			order: 'desc'
+			order: 'desc',
+			user : this.props.data.user,
+			start : this.props.data.start,
+			end: this.props.data.end
 		}
 		
 		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_emp_name.php',qs.stringify(obj))
@@ -97,7 +103,10 @@ class ViewDataTable extends Component
 		const obj = {
 			user_id : this.props.data.user_id,
 			empl : this.props.data.empl,
-			ctype : this.state.ctype
+			ctype : this.state.ctype,
+			user : this.props.data.user,
+			start : this.props.data.start,
+			end: this.props.data.end
 		}
 		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_emp_name.php',qs.stringify(obj))
 		.then(response => 
@@ -188,7 +197,7 @@ class ViewDataTable extends Component
 					<table className="table table-striped table-bordered" style={{marginTop: 20}}>
 						<thead>
 							<tr>
-								<th colSpan="2"> Employer Name: {this.props.emp_name} </th>
+								<th colSpan="3"> Employer Name: {this.props.emp_name} </th>
 								<th colSpan="2">
 									<select className = "form-control" onChange = {this.onChange} name = "ctype" value = {optionItems_ctype.comm_type_id}>
 										{optionItems_ctype}
@@ -199,12 +208,13 @@ class ViewDataTable extends Component
 								</th>
 							</tr>
 							<tr>
-								<td colSpan="5">
+								<td colSpan="6">
 									{<EmpDetails data = {this.state.obj}/>}
 								</td>
 							</tr>
 							<tr>
 								<th> Date  <button type="button" className="btn btn-info" onClick = {this.sort_date_asc}> <FA name="arrow-up" /></button> &nbsp;<button type="button" className="btn btn-success" onClick = {this.sort_date_desc}> <FA name="arrow-down" /> </button> </th>
+								<th> User </th>
 								<th> Communication Type </th>
 								<th> Notes </th>
 								<th> File Attached </th>
