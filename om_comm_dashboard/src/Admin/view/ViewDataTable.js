@@ -22,7 +22,8 @@ class ViewDataTable extends Component
 			c_type : [],
 			ctype :"",
 			emp_name : "",
-			username : ""
+			username : "",
+			notes: ""
 		};
 		
 		this.onChange = this.onChange.bind(this);
@@ -32,6 +33,7 @@ class ViewDataTable extends Component
 		this.sort_date_desc = this.sort_date_desc.bind(this);
 		
 		this.back = this.back.bind(this);
+		this.save = this.save.bind(this);
 	}
 	
 	onChange(e)
@@ -40,6 +42,34 @@ class ViewDataTable extends Component
 			[e.target.name] : e.target.value
 		})
 		
+	}
+	
+	save()
+	{
+		const obj = {
+			user_id : this.props.data.user_id,
+			empl : this.props.data.empl,
+			ctype : this.props.data.ctype,
+			order: 'desc',
+			user : this.props.data.user,
+			start : this.props.data.start,
+			end: this.props.data.end,
+			notes: this.state.notes
+		}
+		
+		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_emp_name.php',qs.stringify(obj))
+		.then(response => 
+		{
+			this.setState({
+				emp_name : response.data.emp_name
+			})
+		})
+		
+		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/save_emp_notes.php',qs.stringify(obj))
+		.then(response => 
+		{
+			ReactDOM.render(<ViewDataTable1 data = {obj} emp_name = {this.state.emp_name} />, document.getElementById('root'));
+		})
 	}
 	
 	sort_date_asc(props)
@@ -153,6 +183,7 @@ class ViewDataTable extends Component
 			
             this.setState({
 				obj: response.data,
+				notes: response.data.emp_notes
 			});
 
 		})
@@ -234,6 +265,21 @@ class ViewDataTable extends Component
 								</td>
 							</tr>
 							<tr>
+								<td colSpan = "6">
+									<div className="form-group">
+										<label><b> Employer Notes </b></label>
+										<div className = "row">
+											<div className = "col-lg-11 col-md-11 col-sm-11 col-xs-11">
+												<textarea className = "form-control" rows = "3" name = "notes" value = {this.state.notes} onChange = {this.onChange} />
+											</div>
+											<div className = "col-lg-1 col-md-1 col-sm-1 col-xs-1">
+												<button className="btn btn-warning" onClick = {this.save}> Save Notes</button>	
+											</div>
+										</div>
+									</div>
+								</td>
+							</tr>
+							<tr>
 								<th> Date  <button type="button" className="btn btn-info" onClick = {this.sort_date_asc}> <FA name="arrow-up" /></button> &nbsp;<button type="button" className="btn btn-success" onClick = {this.sort_date_desc}> <FA name="arrow-down" /> </button> </th>
 								<th> User </th>
 								<th> Communication Type </th>
@@ -256,6 +302,7 @@ class ViewDataTable extends Component
 
 class EmpDetails extends Component
 {
+	
 	render()
 	{
 		return (
@@ -282,10 +329,9 @@ class EmpDetails extends Component
 							<td> <b> State: </b> &nbsp;{this.props.data.emp_state}</td>
 							<td> <b> Zip Code: </b> &nbsp;{this.props.data.emp_zip}</td>
 							<td> <b> Country: </b> &nbsp;{this.props.data.emp_country}</td>
-						</tr>
+						</tr>	
 					</tbody>
 				</table>
-			<br />
 			</div>
 		)
 		
