@@ -36,6 +36,12 @@ if($res = mysqli_query($con, $sql))
 	$emp['emp_primary_contact'] = $row['emp_primary_contact'];
 	$emp['emp_email'] = $row['emp_email'];
 	
+	$sql1 = "select * from emp_notes where emp_id = '$empl'";
+	$res1 = mysqli_query($con, $sql1);
+	$row1 = mysqli_fetch_assoc($res1);
+	
+	$emp['emp_notes'] = $row1['notes'];
+	
 	echo json_encode($emp);
 }
 else

@@ -208,11 +208,11 @@ if(isset($postdata) && !empty($postdata))
 			$emp[$c]['comm_file'] = $row['comm_file'];
 			
 			$emp[$c]['comm_flag'] = $row['comm_flag'];
-			
+			$userX = $row['user_id'];
 		
 			$emp_q = "select emp_name from employers where emp_id = '$empid1'";
 			$ctype_q = "select comm_type_name from comm_type where comm_type_id = '$ctypeid1'";
-			$user11 = "select name from users where user_id = '$user'";
+			$user11 = "select name from users where user_id = '$userX'";
 			
 			$res1 = mysqli_query($con, $emp_q);
 			$res2 = mysqli_query($con, $ctype_q);
