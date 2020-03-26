@@ -6,6 +6,7 @@ import qs from "qs"
 import View_DateRange from "./View_DateRange"
 import ViewTableRows from "./ViewTableRows"
 import ViewDataTable from "./ViewDataTable"
+import Enter_Comm from "../Enter_Comm"
 
 var FA = require('react-fontawesome')
 
@@ -27,6 +28,7 @@ class ViewDataTable1 extends Component
 		
 		this.onChange = this.onChange.bind(this);
 		this.onclickCommType = this.onclickCommType.bind(this);
+		this.enter_comm = this.enter_comm.bind(this);
 		
 		this.sort_date_asc = this.sort_date_asc.bind(this);
 		this.sort_date_desc = this.sort_date_desc.bind(this);
@@ -195,6 +197,10 @@ class ViewDataTable1 extends Component
 		});
 	}
 	
+	enter_comm(props)
+	{
+		ReactDOM.render(<Enter_Comm user_id = {this.props.data.user_id} />, document.getElementById("root"));
+	}
 	
 	render()
 	{
@@ -227,12 +233,15 @@ class ViewDataTable1 extends Component
 					<br />
 				
 					<div className = "row">
-						<div className = "col-lg-10 col-md-10 col-sm-10 col-xs-10">
+						<div className = "col-lg-9 col-md-9 col-sm-9 col-xs-9">
 							<h4> <b>
 								All communications:
 							</b> </h4>
 						</div>
 						<div className = "col-lg-2 col-md-2 col-sm-2 col-xs-2"> 
+							<button type="button" className="btn btn-success" onClick = {this.enter_comm}> Enter New Communication </button>
+						</div>
+						<div className = "col-lg-1 col-md-1 col-sm-1 col-xs-1"> 
 							<button type="button" className="btn btn-primary" onClick = {this.back}> &nbsp;&nbsp; Back &nbsp;&nbsp; </button>
 						</div>
 					</div>

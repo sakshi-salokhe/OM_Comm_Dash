@@ -118,20 +118,29 @@ class Enter_Comm extends Component
 						comm_id : res.data.comm_id
 					}
 					console.log(obj1);
-					axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/update_new_comm.php', qs.stringify(obj1))
-					.then(resp=>
+					if(obj1.file_name != null)
 					{
-						if(resp.data.stat == "yes")
+						axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/update_new_comm.php', qs.stringify(obj1))
+						.then(resp=>
 						{
-							alert("Uploaded File successfully.");
-							this.back();
-						}
-						else
-						{
-							alert("There was some error in uploading the file.");
-							this.back();
-						}
-					});
+							if(resp.data.stat == "yes")
+							{
+								alert("Uploaded File successfully.");
+								this.back();
+							}
+							else
+							{
+								alert("There was some error in uploading the file.");
+								this.back();
+							}
+						});
+					}
+					else
+					{
+						alert("Entered Communication Successfully.");
+						this.back();
+					}
+					
 				}
 				else
 				{
