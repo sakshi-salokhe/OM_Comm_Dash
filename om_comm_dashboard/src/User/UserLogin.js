@@ -95,7 +95,7 @@ class UserLogin extends Component
 					<div className = "col-lg-2 col-md-2 col-sm-2 col-xs-2"> </div>
 					
 					<div className = "col-lg-3 col-md-3 col-sm-3 col-xs-3">
-						<button type="button" className="btn btn-info btn-lg" onClick = {this.view_comm}> &nbsp;&nbsp;&nbsp; View Old Communications &nbsp;&nbsp;&nbsp;</button>
+						<button type="button" className="btn btn-info btn-lg" onClick = {this.view_comm}> &nbsp;&nbsp;&nbsp; View Communications by Employers &nbsp;&nbsp;&nbsp;</button>
 					</div>
 					
 					<div className = "col-lg-6 col-md-6 col-sm-6 col-xs-6"></div>

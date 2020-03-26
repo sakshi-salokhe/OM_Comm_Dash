@@ -240,7 +240,7 @@ class ViewDataTable1 extends Component
 					<table className="table table-striped table-bordered" style={{marginTop: 20}}>
 						<thead>
 							<tr>
-								<th colSpan="2"> Employer Name: {this.props.emp_name} </th>
+								<th colSpan="3"> Employer Name: {this.props.emp_name} </th>
 								<th colSpan="2">
 									<select className = "form-control" onChange = {this.onChange} name = "ctype" value = {optionItems_ctype.comm_type_id}>
 										{optionItems_ctype}
@@ -251,12 +251,12 @@ class ViewDataTable1 extends Component
 								</th>
 							</tr>
 							<tr>
-								<td colSpan="5">
+								<td colSpan="6">
 									{<EmpDetails data = {this.state.obj}/>}
 								</td>
 							</tr>
 							<tr>
-								<td colSpan = "5">
+								<td colSpan = "6">
 									<div className="form-group">
 										<label><b> Employer Notes </b></label>
 										<div className = "row">
@@ -272,6 +272,7 @@ class ViewDataTable1 extends Component
 							</tr>
 							<tr>
 								<th> Date  <button type="button" className="btn btn-info" onClick = {this.sort_date_asc}> <FA name="arrow-up" /></button> &nbsp;<button type="button" className="btn btn-success" onClick = {this.sort_date_desc}> <FA name="arrow-down" /> </button> </th>
+								<th> User </th>
 								<th> Communication Type </th>
 								<th> Notes </th>
 								<th> File Attached </th>

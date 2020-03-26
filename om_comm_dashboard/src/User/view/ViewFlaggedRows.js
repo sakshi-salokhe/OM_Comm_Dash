@@ -30,6 +30,9 @@ class ViewFlaggedRows extends Component
 		return (
 				<tr>
 					<td>
+						{this.props.obj.user}
+					</td>
+					<td>
 						{this.props.obj.comm_date}
 					</td>
 					<td>

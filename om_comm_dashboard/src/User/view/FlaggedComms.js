@@ -94,9 +94,10 @@ class FlaggedComms extends Component
 						<table className="table table-striped table-bordered" style={{marginTop: 20}}>
 							<thead>
 								<tr>
-									<th colSpan="3"> Employer Name: {this.props.emp_name} </th>
+									<th colSpan="4"> Employer Name: {this.props.emp_name} </th>
 								</tr>
 								<tr>
+									<th> User</th>
 									<th> Communication Date</th>
 									<th> Communication Type </th>
 									<th> Attached File </th>
