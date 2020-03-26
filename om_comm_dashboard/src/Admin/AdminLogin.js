@@ -8,6 +8,7 @@ import Logout from '../MainPage/Logout'
 import ChangePass from '../MainPage/ChangePass'
 import ViewDataTable from './view/ViewDataTable'
 import FlaggedComms from './view/FlaggedComms'
+import ViewDataTableAllEmps from './view/ViewDataTableAllEmps'
 
 class AdminLogin extends Component
 {
@@ -81,7 +82,7 @@ class AdminLogin extends Component
 		//console.log("check: ", obj);
 		if(obj.empl.length === 0)
 		{
-			alert("Please choose an employer.");
+			ReactDOM.render(<ViewDataTableAllEmps data = {obj} />, document.getElementById('root'));
 		}
 		else
 		{
