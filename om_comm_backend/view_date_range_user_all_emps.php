@@ -191,6 +191,7 @@ if(isset($postdata) && !empty($postdata))
 	if($res = mysqli_query($con, $sql))
 	{
 		$c = 0;
+		$count = mysqli_num_rows($res);
 		while($row = mysqli_fetch_assoc($res))
 		{
 			$emp[$c]['id'] = $row['comm_id'];
@@ -227,6 +228,7 @@ if(isset($postdata) && !empty($postdata))
 			$emp[$c]['ctype'] = $ctype;
 			$emp[$c]['order'] = $order;
 			$emp[$c]['user'] = $row3['name'];
+			$emp[$c]['count'] = $count;
 			
 			$c++;
 		}
@@ -250,6 +252,7 @@ if(isset($postdata) && !empty($postdata))
 			$emp[$c]['ctype'] = $ctype;
 			$emp[$c]['order'] = $order;
 			$emp[$c]['user'] = $user;
+			$emp[$c]['count'] = $count;
 			
 			echo json_encode($emp);
 		}
