@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import ReactDOM from "react-dom"
 import axios from "axios"
 import qs from "qs"
+import ReactToExcel from 'react-html-table-to-excel'
 
 import AdminLogin from "../AdminLogin"
 import ViewTableRows from "./ViewTableRows"
@@ -250,7 +251,9 @@ class ViewDataTable1 extends Component
 						</div>
 					</div>
 					
-					<table className="table table-striped table-bordered" style={{marginTop: 20}}>
+					<ReactToExcel className = "btn btn-primary" table="table-to-xls" filename="OM Communicatons" sheet="Sheet 1" buttonText="EXPORT" />
+					
+					<table className="table table-striped table-bordered" id="table-to-xls" style={{marginTop: 20}}>
 						<thead>
 							<tr>
 								<th colSpan="3"> Employer Name: {this.props.emp_name} </th>
