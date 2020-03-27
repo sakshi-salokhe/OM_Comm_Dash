@@ -23,7 +23,8 @@ class ViewDataTableAllEmps1 extends Component
 			ctype :"",
 			emp_name : "",
 			username : "",
-			notes: ""
+			notes: "",
+			count: ""
 		};
 		
 		this.onChange = this.onChange.bind(this);
@@ -129,7 +130,10 @@ class ViewDataTableAllEmps1 extends Component
 		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/view_date_range_user_all_emps.php', qs.stringify(this.props.data))
 		.then(res => 
 			{
-				this.setState({ comms: res.data });
+				this.setState({ 
+				comms: res.data,
+				count: res.data[0].count
+				});
 			})
 			
 		axios.get('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_com_type.php')
@@ -200,6 +204,13 @@ class ViewDataTableAllEmps1 extends Component
 					
 					<table className="table table-striped table-bordered" style={{marginTop: 20}}>
 						<thead>
+							<tr>
+								<td colSpan = "6">
+									<div className="form-group">
+										<label><b> Total number of communications: </b> &nbsp;{this.state.count} </label>
+									</div>
+								</td>
+							</tr>
 							<tr>
 								<th colSpan="3">  </th>
 								<th colSpan="2">
