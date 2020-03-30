@@ -317,7 +317,7 @@ class EmpDetails extends Component
 							<td> <b> Phone: </b> &nbsp;{this.props.data.emp_phone}</td>
 							<td> <b> Extension: </b> &nbsp;{this.props.data.emp_ext}</td>
 							<td> <b> Fax number: </b> &nbsp;{this.props.data.emp_fax}</td>
-							<td> <b> Email Address: </b> &nbsp;{this.props.data.emp_email}</td>
+							<td> <b> Email Address: </b> <a href={"mailto:"+this.props.data.emp_email}> <button className = "btn btn-link"> {this.props.data.emp_email}</button> </a> </td>
 						</tr>
 						
 						<tr>
