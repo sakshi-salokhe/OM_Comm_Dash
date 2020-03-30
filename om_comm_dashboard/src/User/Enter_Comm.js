@@ -20,7 +20,8 @@ class Enter_Comm extends Component
 			ctype: "",
 			notes: "",
 			file: "",
-			file11 : ""
+			file11 : "",
+			username : ""
 		};
 		
 		this.back = this.back.bind(this);
@@ -69,6 +70,14 @@ class Enter_Comm extends Component
 			})
 			//console.log(resp.data);
 		})
+		
+		axios.get('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_username.php?user_id='+this.props.user_id)
+		.then(response => 
+		{
+            this.setState({
+				username: response.data.name
+			})
+		})
 	}
 	
 	onchange(e)
@@ -109,20 +118,29 @@ class Enter_Comm extends Component
 						comm_id : res.data.comm_id
 					}
 					console.log(obj1);
-					axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/update_new_comm.php', qs.stringify(obj1))
-					.then(resp=>
+					if(obj1.file_name != null)
 					{
-						if(resp.data.stat == "yes")
+						axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/update_new_comm.php', qs.stringify(obj1))
+						.then(resp=>
 						{
-							alert("Uploaded File successfully.");
-							this.back();
-						}
-						else
-						{
-							alert("There was some error in uploading the file.");
-							this.back();
-						}
-					});
+							if(resp.data.stat == "yes")
+							{
+								alert("Uploaded File successfully.");
+								this.back();
+							}
+							else
+							{
+								alert("There was some error in uploading the file.");
+								this.back();
+							}
+						});
+					}
+					else
+					{
+						alert("Entered Communication Successfully.");
+						this.back();
+					}
+					
 				}
 				else
 				{
@@ -154,8 +172,20 @@ class Enter_Comm extends Component
 						Occ Med Communication Dashboard
 					</b> </h1> </center>
 				</div>
-				
 				<br />
+				
+				<div className = "row">
+					<div className = "col-lg-7 col-md-7 col-sm-7 col-xs-7">
+						<h4>
+							 You are logged in as {this.state.username}
+						</h4>
+					</div>
+					<div className = "col-lg-5 col-md-5 col-sm-5 col-xs-5"> 
+					</div>
+					
+				</div>
+				<br />
+				
 				<div className = "row">
 					<div className = "col-lg-7 col-md-7 col-sm-7 col-xs-7">
 						<h4> <b> Enter New Communication</b> </h4>

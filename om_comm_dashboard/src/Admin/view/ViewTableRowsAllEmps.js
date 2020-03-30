@@ -5,11 +5,11 @@ import qs from "qs"
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import {Redirect} from "react-router"
 
-import View_DateRange from './View_DateRange'
-import ViewDataTable from './ViewDataTable'
+import AdminLogin from '../AdminLogin'
+import ViewDataTableAllEmps from './ViewDataTableAllEmps'
 
 
-class ViewTableRows extends Component
+class ViewTableRowsAllEmps extends Component
 {
 	constructor(props)
 	{
@@ -26,7 +26,7 @@ class ViewTableRows extends Component
 	
 	back()
 	{
-		ReactDOM.render(<View_DateRange user_id = {this.props.obj.user_id} />, document.getElementById("root"));
+		ReactDOM.render(<AdminLogin user_id = {this.props.obj.user_id} />, document.getElementById("root"));
 	}
 	
 	flag()
@@ -48,14 +48,14 @@ class ViewTableRows extends Component
 			<Router>
 			
 				<Route>
-					<Redirect to='ViewDataTable' data = {this.props.obj}/>
+					<Redirect to='ViewDataTableAllEmps' data = {this.props.obj}/>
 				</Route>
 			</Router>)
 		}
-		
+		console.log(this.props.obj);
 		const condition = this.props.obj.comm_flag === 1 || this.props.obj.comm_flag === '1';
 		const condition2 = this.props.obj.id === null;
-		console.log(this.props);
+		
 		return (
 				<tr style={{ backgroundColor: condition ? "#FED2D2" : "white" }}>
 					<td>
@@ -63,6 +63,9 @@ class ViewTableRows extends Component
 					</td>
 					<td>
 						{this.props.obj.user}
+					</td>
+					<td>
+						{this.props.obj.emp_name}
 					</td>
 					<td>
 						{this.props.obj.ctype_name}
@@ -83,4 +86,4 @@ class ViewTableRows extends Component
 	}
 }
 
-export default ViewTableRows
+export default ViewTableRowsAllEmps

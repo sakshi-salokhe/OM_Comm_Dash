@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
+import axios from 'axios' 
 
 import Logout from '../MainPage/Logout'
 import ChangePass from '../MainPage/ChangePass'
@@ -13,6 +14,10 @@ class UserLogin extends Component
 	constructor(props)
 	{
 		super(props)
+		
+		this.state = {
+			username : ""
+		}
 		this.changepass = this.changepass.bind(this)
 		this.enter_comm = this.enter_comm.bind(this)
 		this.view_comm = this.view_comm.bind(this)
@@ -39,6 +44,17 @@ class UserLogin extends Component
 		ReactDOM.render(<View_DateRange user_id = {this.props.user_id} />, document.getElementById("root"));
 	}
 	
+	componentDidMount()
+	{
+		axios.get('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_username.php?user_id='+this.props.user_id)
+		.then(response => 
+		{
+            this.setState({
+				username: response.data.name
+			})
+		})
+	}
+	
 	render()
 	{
 		//user_id = this.props.user_id;
@@ -55,7 +71,9 @@ class UserLogin extends Component
 				
 				<br />
 				<div className = "row">
-					<div className = "col-lg-7 col-md-7 col-sm-7 col-xs-7"> </div>
+					<div className = "col-lg-7 col-md-7 col-sm-7 col-xs-7"> 
+						<h4> <b> Welcome {this.state.username} </b> </h4>
+					</div>
 					<div className = "col-lg-5 col-md-5 col-sm-5 col-xs-5"> 
 						<button type="button" className="btn btn-success" onClick = {this.changepass}> &nbsp;&nbsp;&nbsp; Change Password &nbsp;&nbsp;&nbsp;</button>
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -77,7 +95,7 @@ class UserLogin extends Component
 					<div className = "col-lg-2 col-md-2 col-sm-2 col-xs-2"> </div>
 					
 					<div className = "col-lg-3 col-md-3 col-sm-3 col-xs-3">
-						<button type="button" className="btn btn-info btn-lg" onClick = {this.view_comm}> &nbsp;&nbsp;&nbsp; View Old Communications &nbsp;&nbsp;&nbsp;</button>
+						<button type="button" className="btn btn-info btn-lg" onClick = {this.view_comm}> &nbsp;&nbsp;&nbsp; View Communications by Employers &nbsp;&nbsp;&nbsp;</button>
 					</div>
 					
 					<div className = "col-lg-6 col-md-6 col-sm-6 col-xs-6"></div>

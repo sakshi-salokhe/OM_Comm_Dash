@@ -33,6 +33,9 @@ class ViewFlaggedRows extends Component
 						{this.props.obj.comm_date}
 					</td>
 					<td>
+						{this.props.obj.user}
+					</td>
+					<td>
 						{this.props.obj.ctype_name}
 					</td>
 					<td>

@@ -5,12 +5,12 @@ import qs from "qs"
 import ReactToExcel from 'react-html-table-to-excel'
 
 import AdminLogin from "../AdminLogin"
-import ViewTableRows from "./ViewTableRows"
-import ViewDataTable1 from "./ViewDataTable1"
+import ViewTableRowsAllEmps from "./ViewTableRowsAllEmps"
+import ViewDataTableAllEmps1 from "./ViewDataTableAllEmps1"
 
 var FA = require('react-fontawesome')
 
-class ViewDataTable extends Component
+class ViewDataTableAllEmps extends Component
 {
 	constructor(props)
 	{
@@ -35,7 +35,6 @@ class ViewDataTable extends Component
 		this.sort_date_desc = this.sort_date_desc.bind(this);
 		
 		this.back = this.back.bind(this);
-		this.save = this.save.bind(this);
 	}
 	
 	onChange(e)
@@ -44,34 +43,6 @@ class ViewDataTable extends Component
 			[e.target.name] : e.target.value
 		})
 		
-	}
-	
-	save()
-	{
-		const obj = {
-			user_id : this.props.data.user_id,
-			empl : this.props.data.empl,
-			ctype : this.props.data.ctype,
-			order: 'desc',
-			user : this.props.data.user,
-			start : this.props.data.start,
-			end: this.props.data.end,
-			notes: this.state.notes
-		}
-		
-		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_emp_name.php',qs.stringify(obj))
-		.then(response => 
-		{
-			this.setState({
-				emp_name : response.data.emp_name
-			})
-		})
-		
-		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/save_emp_notes.php',qs.stringify(obj))
-		.then(response => 
-		{
-			ReactDOM.render(<ViewDataTable1 data = {obj} emp_name = {this.state.emp_name} />, document.getElementById('root'));
-		})
 	}
 	
 	sort_date_asc(props)
@@ -94,10 +65,10 @@ class ViewDataTable extends Component
 			})
 		})
 		
-		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/view_date_range_user.php',qs.stringify(obj))
+		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/view_date_range_user_all_emps.php',qs.stringify(obj))
 		.then(response => 
 		{
-			ReactDOM.render(<ViewDataTable1 data = {obj} emp_name = {this.state.emp_name} />, document.getElementById('root'));
+			ReactDOM.render(<ViewDataTableAllEmps1 data = {obj} />, document.getElementById('root'));
 		})
 		
 	}
@@ -122,10 +93,10 @@ class ViewDataTable extends Component
 			})
 		})
 		
-		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/view_date_range_user.php',qs.stringify(obj))
+		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/view_date_range_user_all_emps.php',qs.stringify(obj))
 		.then(response => 
 		{
-			ReactDOM.render(<ViewDataTable1 data = {obj} emp_name = {this.state.emp_name} />, document.getElementById('root'));
+			ReactDOM.render(<ViewDataTableAllEmps1 data = {obj} />, document.getElementById('root'));
 		})
 		
 	}
@@ -141,18 +112,11 @@ class ViewDataTable extends Component
 			start : this.props.data.start,
 			end: this.props.data.end
 		}
-		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_emp_name.php',qs.stringify(obj))
-		.then(response => 
-		{
-			this.setState({
-				emp_name : response.data.emp_name
-			})
-		})
 			
-		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/view_date_range_user.php',qs.stringify(obj))
+		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/view_date_range_user_all_emps.php',qs.stringify(obj))
 		.then(response => 
 		{
-			ReactDOM.render(<ViewDataTable1 data = {obj} emp_name = {this.state.emp_name} />, document.getElementById('root'));
+			ReactDOM.render(<ViewDataTableAllEmps1 data = {obj} />, document.getElementById('root'));
 		})
 		
 	}
@@ -164,13 +128,13 @@ class ViewDataTable extends Component
 	
 	componentDidMount()
 	{
-		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/view_date_range_user.php', qs.stringify(this.props.data))
+		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/view_date_range_user_all_emps.php', qs.stringify(this.props.data))
 		.then(res => 
 			{
 				this.setState({ 
-					comms: res.data,
-					count: res.data[0].count 
-					});
+				comms: res.data,
+				count: res.data[0].count
+				});
 			})
 			
 		axios.get('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_com_type.php')
@@ -179,18 +143,6 @@ class ViewDataTable extends Component
             this.setState({
 				c_type: resp.data
 			})
-		})
-		
-		axios.get('http://localhost:81/OM_Comm_Dash/om_comm_backend/view_emp_details.php?empl='+this.props.data.empl+'&user_id='+this.props.data.user_id)
-		.then(response => 
-		{
-			const {show} = this.state;
-			
-            this.setState({
-				obj: response.data,
-				notes: response.data.emp_notes
-			});
-
 		})
 		
 		axios.get('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_username.php?user_id='+this.props.data.user_id)
@@ -206,7 +158,7 @@ class ViewDataTable extends Component
 	{
 		return this.state.comms.map(function(object)
 		{
-			return <ViewTableRows key={object.userid} obj={object} />;
+			return <ViewTableRowsAllEmps key={object.userid} obj={object} />;
 		});
 	}
 	
@@ -256,7 +208,14 @@ class ViewDataTable extends Component
 					<table className="table table-striped table-bordered" id="table-to-xls" style={{marginTop: 20}}>
 						<thead>
 							<tr>
-								<th colSpan="3"> Employer Name: {this.props.emp_name} </th>
+								<td colSpan = "6">
+									<div className="form-group">
+										<label><b> Total number of communications: </b> &nbsp;{this.state.count} </label>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th colSpan="3">  </th>
 								<th colSpan="2">
 									<select className = "form-control" onChange = {this.onChange} name = "ctype" value = {optionItems_ctype.comm_type_id}>
 										{optionItems_ctype}
@@ -266,38 +225,11 @@ class ViewDataTable extends Component
 									<button type="button" className="btn btn-warning" onClick = {this.onclickCommType} > Apply </button>
 								</th>
 							</tr>
-							<tr>
-								<td colSpan="6">
-									{<EmpDetails data = {this.state.obj}/>}
-								</td>
-							</tr>
-							<tr>
-								<td colSpan = "6">
-									<div className="form-group">
-										<label><b> Employer Notes </b></label>
-										<div className = "row">
-											<div className = "col-lg-11 col-md-11 col-sm-11 col-xs-11">
-												<textarea className = "form-control" rows = "3" name = "notes" value = {this.state.notes} onChange = {this.onChange} />
-											</div>
-											<div className = "col-lg-1 col-md-1 col-sm-1 col-xs-1">
-												<button className="btn btn-warning" onClick = {this.save}> Save Notes</button>	
-											</div>
-										</div>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td colSpan = "6">
-									<div className="form-group">
-										<label><b> Total number of communications: </b> &nbsp;{this.state.count} </label>
-									</div>
-								</td>
-							</tr>
-							<tr>
-							</tr>
+							
 							<tr>
 								<th> Date  <button type="button" className="btn btn-info" onClick = {this.sort_date_asc}> <FA name="arrow-up" /></button> &nbsp;<button type="button" className="btn btn-success" onClick = {this.sort_date_desc}> <FA name="arrow-down" /> </button> </th>
 								<th> User </th>
+								<th> Employer Name </th>
 								<th> Communication Type </th>
 								<th> Notes </th>
 								<th> File Attached </th>
@@ -316,42 +248,4 @@ class ViewDataTable extends Component
 	}
 }
 
-class EmpDetails extends Component
-{
-	
-	render()
-	{
-		return (
-		
-			<div className = "container-fluid">
-			<br />
-				<table className="table table-striped table-bordered">
-					<tbody>
-						<tr>
-							<td> <b> Employer ID: </b> &nbsp;{this.props.data.employer_ID} </td>
-							<td> <b> Employer Department: </b> &nbsp;{this.props.data.emp_dept}</td>
-							<td> <b> Primary Contact: </b> &nbsp;{this.props.data.emp_primary_contact}</td>
-							<td> <b> Phone: </b> &nbsp;{this.props.data.emp_phone}</td>
-							<td> <b> Extension: </b> &nbsp;{this.props.data.emp_ext}</td>
-							<td> <b> Fax number: </b> &nbsp;{this.props.data.emp_fax}</td>
-							<td> <b> Email Address: </b> <a href={"mailto:"+this.props.data.emp_email}> <button className = "btn btn-link"> {this.props.data.emp_email}</button> </a> </td>
-						</tr>
-						
-						<tr>
-							<td> <b> Address 1: </b> &nbsp;{this.props.data.emp_add1}</td>
-							<td> <b> Address 2: </b> &nbsp;{this.props.data.emp_add2}</td>
-							<td> <b> Suite: </b> &nbsp;{this.props.data.emp_suite}</td>
-							<td> <b> City: </b> &nbsp;{this.props.data.emp_city}</td>
-							<td> <b> State: </b> &nbsp;{this.props.data.emp_state}</td>
-							<td> <b> Zip Code: </b> &nbsp;{this.props.data.emp_zip}</td>
-							<td> <b> Country: </b> &nbsp;{this.props.data.emp_country}</td>
-						</tr>	
-					</tbody>
-				</table>
-			</div>
-		)
-		
-	}
-}
-
-export default ViewDataTable
+export default ViewDataTableAllEmps
