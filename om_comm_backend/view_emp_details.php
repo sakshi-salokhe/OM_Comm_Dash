@@ -41,6 +41,22 @@ if($res = mysqli_query($con, $sql))
 	$row1 = mysqli_fetch_assoc($res1);
 	
 	$emp['emp_notes'] = $row1['notes'];
+
+	$sql2 = "select * from emp_details where emp_id = '$empl'";
+	$res2 = mysqli_query($con, $sql2);
+	$row2 = mysqli_fetch_assoc($res2);
+	
+	//0: no 1:yes 2:blank
+	$emp['email_invoices'] = isset($row2['email_invoices']) ? $row2['email_invoices'] : '0';
+	$emp['mail_invoices'] = isset($row2['mail_invoices']) ? $row2['mail_invoices'] : '1';
+	$emp['portal_invoices'] = isset($row2['portal_invoices']) ? $row2['portal_invoices'] : '0';
+	$emp['portal_login'] = $row2['portal_login'];
+	$emp['fiscal_year_end'] = isset($row2['fiscal_year_end']) ? $row2['fiscal_year_end'] : '12';
+	$emp['encryp_emails'] = isset($row2['encryp_emails']) ? $row2['encryp_emails'] : '2';
+	$emp['spl_bill_inst'] = $row2['spl_bill_inst'];
+	$emp['pricing'] = isset($row2['pricing']) ? $row2['pricing'] : '1';
+	$emp['bankruptcy'] = isset($row2['bankruptcy']) ? $row2['bankruptcy'] : '0';
+	$emp['collections'] = isset($row2['collections']) ? $row2['collections'] : '0';
 	
 	echo json_encode($emp);
 }
