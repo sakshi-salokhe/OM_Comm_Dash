@@ -25,7 +25,17 @@ class ViewDataTable extends Component
 			emp_name : "",
 			username : "",
 			notes: "",
-			count : ""
+			count : "",
+			email_invoices : "",
+			mail_invoices : "",
+			portal_invoices : "",
+			portal_login : "",
+			fiscal_year_end : "",
+			encryp_emails : "",
+			spl_bill_inst : "",
+			pricing : "",
+			bankruptcy : "",
+			collections : "",
 		};
 		
 		this.onChange = this.onChange.bind(this);
@@ -36,6 +46,7 @@ class ViewDataTable extends Component
 		
 		this.back = this.back.bind(this);
 		this.save = this.save.bind(this);
+		this.saveempdetails = this.saveempdetails.bind(this);
 	}
 	
 	onChange(e)
@@ -44,6 +55,45 @@ class ViewDataTable extends Component
 			[e.target.name] : e.target.value
 		})
 		
+	}
+
+	saveempdetails()
+	{
+		const obj = {
+			user_id : this.props.data.user_id,
+			empl : this.props.data.empl,
+			ctype : this.props.data.ctype,
+			order: 'desc',
+			user : this.props.data.user,
+			start : this.props.data.start,
+			end: this.props.data.end,
+			email_invoices : this.state.email_invoices,
+			mail_invoices : this.state.mail_invoices,
+			portal_invoices : this.state.portal_invoices,
+			portal_login : this.state.portal_login,
+			fiscal_year_end : this.state.fiscal_year_end,
+			encryp_emails : this.state.encryp_emails,
+			spl_bill_inst : this.state.spl_bill_inst,
+			pricing : this.state.pricing,
+			bankruptcy : this.state.bankruptcy,
+			collections : this.state.collections
+		}
+
+		console.log(obj);
+
+		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_emp_name.php',qs.stringify(obj))
+		.then(response => 
+		{
+			this.setState({
+				emp_name : response.data.emp_name
+			})
+		})
+
+		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/save_emp_details.php',qs.stringify(obj))
+		.then(response => 
+		{
+			ReactDOM.render(<ViewDataTable1 data = {obj} emp_name = {this.state.emp_name} />, document.getElementById('root'));
+		})
 	}
 	
 	save()
@@ -192,6 +242,25 @@ class ViewDataTable extends Component
 			});
 
 		})
+
+		axios.get('http://localhost:81/OM_Comm_Dash/om_comm_backend/view_emp_details.php?empl='+this.props.data.empl+'&user_id='+this.props.data.user_id)
+		.then(response => 
+		{
+			this.setState({
+				obj: response.data,
+				notes: response.data.emp_notes,
+				email_invoices : response.data.email_invoices,
+				mail_invoices : response.data.mail_invoices,
+				portal_invoices : response.data.portal_invoices,
+				portal_login : response.data.portal_login,
+				fiscal_year_end : response.data.fiscal_year_end,
+				encryp_emails : response.data.encryp_emails,
+				spl_bill_inst : response.data.spl_bill_inst,
+				pricing : response.data.pricing,
+				bankruptcy : response.data.bankruptcy,
+				collections : response.data.collections
+			});
+		})
 		
 		axios.get('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_username.php?user_id='+this.props.data.user_id)
 		.then(response => 
@@ -269,6 +338,104 @@ class ViewDataTable extends Component
 							<tr>
 								<td colSpan="6">
 									{<EmpDetails data = {this.state.obj}/>}
+								</td>
+							</tr>
+							<tr>
+								<td colSpan="6">
+									<table className="table table-striped table-bordered">
+										<tbody>
+											<tr>
+												<td> 
+													<b> Email Invoices: </b>
+													<select className = "form-control" value = {this.state.email_invoices} name = "email_invoices" onChange = {this.onChange} placeholder = {this.state.email_invoices}>
+														<option value="1"> Yes </option>
+														<option value="0"> No </option>
+													</select>
+												 </td>
+												<td> 
+													<b> Mail Invoices: </b>
+													<select className = "form-control" value = {this.state.mail_invoices} name = "mail_invoices" onChange = {this.onChange} placeholder = {this.state.mail_invoices}>
+														<option value="1"> Yes </option>
+														<option value="0"> No </option>
+													</select>
+												</td>
+												<td> 
+													<b> Portal Invoices: </b>
+													<select className = "form-control" value = {this.state.portal_invoices} name = "portal_invoices" onChange = {this.onChange} placeholder = {this.state.portal_invoices}>
+														<option value="1"> Yes </option>
+														<option value="0"> No </option>
+													</select>
+												</td>
+												<td> 
+													<b> Fiscal Year End: </b>
+													<select className = "form-control" value = {this.state.fiscal_year_end} name = "fiscal_year_end" onChange = {this.onChange} placeholder = {this.state.fiscal_year_end}>
+														<option value="1"> Jan </option>
+														<option value="2"> Feb </option>
+														<option value="3"> Mar </option>
+														<option value="4"> Apr </option>
+														<option value="5"> May </option>
+														<option value="6"> Jun </option>
+														<option value="7"> Jul </option>
+														<option value="8"> Aug </option>
+														<option value="9"> Sep </option>
+														<option value="10"> Oct </option>
+														<option value="11"> Nov </option>
+														<option value="12"> Dec </option>
+													</select>
+												</td>
+												<td> 
+													<b> Portal Login: </b>
+													<textarea className = "form-control" rows = "2" name = "portal_login" value = {this.state.portal_login} onChange = {this.onChange} placeholder = {this.state.portal_login} />
+												</td>	
+											</tr>
+											
+											<tr>
+												<td> 
+													<b> Can receive Encypted Emails: </b>
+													<select className = "form-control" value = {this.state.encryp_emails} name = "encryp_emails" onChange = {this.onChange} placeholder = {this.state.encryp_emails}>
+														<option value="2">  </option>
+														<option value="1"> Yes </option>
+														<option value="0"> No </option>
+													</select>
+												</td>
+												<td> 
+													<b> Pricing: </b> 
+													<select className = "form-control" value = {this.state.pricing} name = "pricing" onChange = {this.onChange} placeholder = {this.state.pricing}>
+														<option value="1"> Region I </option>
+														<option value="2"> Region II </option>
+														<option value="3"> Region III </option>
+														<option value="4"> Region IV </option>
+														<option value="5"> Special </option>
+													</select>
+												</td>
+												<td> 
+													<b> Bankruptcy: </b>
+													<select className = "form-control" value = {this.state.bankruptcy} name = "bankruptcy" onChange = {this.onChange} placeholder = {this.state.bankruptcy}>
+														<option value="1"> Yes </option>
+														<option value="0"> No </option>
+													</select>
+												</td>
+												<td> 
+													<b> Collections: </b>
+													<select className = "form-control" value = {this.state.collections} name = "collections" onChange = {this.onChange} placeholder = {this.state.collections}>
+														<option value="1"> Yes </option>
+														<option value="0"> No </option>
+													</select>
+												</td>
+												<td> 
+													<b> Special Billing Instructions: </b>
+													<textarea className = "form-control" rows = "2" name = "spl_bill_inst" value = {this.state.spl_bill_inst} onChange = {this.onChange} placeholder = {this.state.spl_bill_inst} />
+												</td>
+											</tr>
+											<tr>
+												<td colSpan = "5">
+													<center>
+														<button className="btn btn-warning" onClick = {this.saveempdetails}> Save Employer Details</button>
+													</center>
+												</td>
+											</tr>
+										</tbody>
+									</table>
 								</td>
 							</tr>
 							<tr>
