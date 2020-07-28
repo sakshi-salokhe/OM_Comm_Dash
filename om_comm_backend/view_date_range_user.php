@@ -42,7 +42,7 @@ if(isset($postdata) && !empty($postdata))
 		$user = $_POST['user'];
 	}
 	
-	if(empty($_POST['ctype']) == True or $_POST['ctype'] == null)
+	if(empty($_POST['ctype']) == True or $_POST['ctype'] == null or $_POST['ctype'] == 1)
 	{
 		$ctype = 0;
 	}
