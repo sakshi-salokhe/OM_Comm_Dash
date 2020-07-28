@@ -1,12 +1,7 @@
 import React, {Component} from "react"
 import ReactDOM from "react-dom"
-import axios from "axios"
-import qs from "qs"
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import {Redirect} from "react-router"
 
 import View_DateRange from './View_DateRange'
-import FlaggedComms from './FlaggedComms'
 
 class ViewFlaggedRows extends Component
 {

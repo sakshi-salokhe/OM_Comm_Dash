@@ -21,7 +21,7 @@ class ViewDataTable extends Component
 			show : false,
 			obj: [],
 			c_type : [],
-			ctype :"",
+			ctype :this.props.data.ctype,
 			emp_name : "",
 			username : "",
 			notes: "",
@@ -327,7 +327,7 @@ class ViewDataTable extends Component
 							<tr>
 								<th colSpan="3"> Employer Name: {this.props.emp_name} </th>
 								<th colSpan="2">
-									<select className = "form-control" onChange = {this.onChange} name = "ctype" value = {optionItems_ctype.comm_type_id}>
+									<select className = "form-control" onChange = {this.onChange} name = "ctype" value = {this.state.ctype}>
 										{optionItems_ctype}
 									</select>
 								</th>

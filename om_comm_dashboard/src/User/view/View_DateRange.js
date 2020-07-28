@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import qs from "qs"
 import axios from "axios"
-import moment from "moment"
 
 import UserLogin from '../UserLogin'
 import ViewDataTable from './ViewDataTable'
@@ -18,7 +17,8 @@ class View_DateRange extends Component
 			emps: [],
 			c_type : [],
 			empl: "",
-			username : ""
+			username : "",
+			danger_alert : false
 		}
 		
 		this.onchange = this.onchange.bind(this)
@@ -76,9 +76,11 @@ class View_DateRange extends Component
 			empl : this.state.empl,
 		}
 		
-		if(obj.empl.length === 0)
+		if(obj.empl <= 1)
 		{
-			alert("Please choose an employer.");
+			this.setState({
+				danger_alert: true
+			})
 		}
 		else
 		{
@@ -97,11 +99,14 @@ class View_DateRange extends Component
 		const obj = {
 			user_id : this.props.user_id,
 			empl : this.state.empl,
+			ctype : 1
 		}
 		
-		if(obj.empl.length === 0)
+		if(obj.empl <= 1)
 		{
-			alert("Please choose an employer.");
+			this.setState({
+				danger_alert: true
+			})
 		}
 		else
 		{
@@ -124,6 +129,10 @@ class View_DateRange extends Component
 				<br />
 				<br />
 				
+				{this.state.danger_alert && <div class="alert alert-danger">
+					<strong>Error! Please fill out all the required fields.</strong>
+				</div>}
+
 				<div className = "row">
 					<center> <h1 style = {{color : "#33a5ff"}}> <b>
 						Occ Med Communication Dashboard
@@ -149,8 +158,8 @@ class View_DateRange extends Component
 						<form className="form-horizontal">
 							
 							<div className="form-group">
-								<label><b> Choose Employer </b> <br /></label>
-								<select className = "form-control" onChange = {this.onchange} name = "empl" value = {optionItems.emp_id}>
+								<label><b> Choose Employer *</b> <br /></label>
+								<select className = "form-control" onChange = {this.onchange} name = "empl" value = {optionItems.emp_id} style={{ borderColor: this.state.empl <=1 ? "#DC143C" : "#79CDCD" }}>
 									{optionItems}
 								</select>
 							</div>

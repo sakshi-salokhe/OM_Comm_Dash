@@ -25,7 +25,8 @@ class AdminLogin extends Component
 			user: "",
 			start: "",
 			end: "",
-			username : ""
+			username : "",
+			danger_alert : false
 		}
 		
 		this.changepass = this.changepass.bind(this)
@@ -54,9 +55,11 @@ class AdminLogin extends Component
 			end: this.state.end
 		}
 		
-		if(obj.empl.length === 0)
+		if(obj.empl <= 1)
 		{
-			alert("Please choose an employer.");
+			this.setState({
+				danger_alert: true
+			})
 		}
 		else
 		{
@@ -77,10 +80,11 @@ class AdminLogin extends Component
 			empl : this.state.empl,
 			user : this.state.user,
 			start : this.state.start,
-			end: this.state.end
+			end: this.state.end,
+			ctype : 1
 		}
-		//console.log("check: ", obj);
-		if(obj.empl.length === 0)
+		
+		if(obj.empl <= 1)
 		{
 			ReactDOM.render(<ViewDataTableAllEmps data = {obj} />, document.getElementById('root'));
 		}
@@ -145,7 +149,11 @@ class AdminLogin extends Component
 			<div className = "container">
 				<br />
 				<br />
-				
+
+				{this.state.danger_alert && <div class="alert alert-danger">
+					<strong>Error! Please fill out all the required fields.</strong>
+				</div>}
+
 				<div className = "row">
 					<center> <h1 style = {{color : "#33a5ff"}}> <b>
 						Occ Med Communication Dashboard
@@ -172,8 +180,8 @@ class AdminLogin extends Component
 						<form className="form-horizontal">
 							
 							<div className="form-group">
-								<label><b> Choose Employer </b> <br /></label>
-								<select className = "form-control" onChange = {this.onchange} name = "empl" value = {optionItems.emp_id}>
+								<label><b> Choose Employer *</b> <br /></label>
+								<select className = "form-control" onChange = {this.onchange} name = "empl" value = {optionItems.emp_id} style={{ borderColor: this.state.empl <=1 ? "#DC143C" : "#79CDCD" }}>
 									{optionItems}
 								</select>
 							</div>
