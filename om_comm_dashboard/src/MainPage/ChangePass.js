@@ -5,6 +5,7 @@ import qs from "qs"
 
 import Login from "./Login"
 import UserLogin from "../User/UserLogin"
+import AdminLogin from "../Admin/AdminLogin"
 
 class ChangePass extends Component
 {
@@ -16,7 +17,11 @@ class ChangePass extends Component
 			email : "",
 			oldpass: "",
 			pass : "",
-			confirm_password : ""
+			confirm_password : "",
+			incomplete_alert : false,
+			wellnow_alert : false,
+			pass_alert : false,
+			somethingwrong_alert : false
 		}
 		
 		this.onchange = this.onchange.bind(this);
@@ -39,7 +44,7 @@ class ChangePass extends Component
 			 {
 				if(res.data.ans === "yes")
 				{
-					//go to admin login page
+					ReactDOM.render(<AdminLogin user_id = {res.data.user_id}/>, document.getElementById("root"));
 				}
 				else
 				{
@@ -64,25 +69,30 @@ class ChangePass extends Component
 		
 		if(obj.email.length === 0 || obj.pass.length === 0 || obj.confirm_password.length === 0 || obj.oldpass.length === 0)
 		{
-			alert("Fill out all the fields!")
+			this.setState({
+				incomplete_alert : true
+			})
 		}
 		else if(domain.toLowerCase() !== "wellnow.com")
 		{
-			alert("Only WellNow Emails Allowed!")
+			this.setState({
+				wellnow_alert : true
+			})
 		}
 		else
 		{
 			const confpassmatch = obj.confirm_password === obj.pass
 			if(confpassmatch === false)
 			{
-				alert("Passwords dont match. try again.")
+				this.setState({
+					pass_alert: true
+				})
 			}
 			else
 			{
 				axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/changepass.php', qs.stringify(obj))
 				.then(res => 
 				{
-					console.log(res.data);	
 					if(res.data.changed === 'success')
 					{
 						alert("Successfully changed the password.");
@@ -90,7 +100,9 @@ class ChangePass extends Component
 					}
 					else
 					{
-						alert("Enter your own email address!");
+						this.setState({
+							somethingwrong_alert : true
+						})
 						this.cancel();
 					}
 				});
@@ -105,6 +117,22 @@ class ChangePass extends Component
 			<div className = "container">
 				<br />
 				<br />
+
+				{this.state.incomplete_alert && <div class="alert alert-danger">
+					<strong>Error! Please fill out all the required fields.</strong>
+				</div>}
+
+				{this.state.wellnow_alert && <div class="alert alert-warning">
+					<strong>Warning! Only WellNow Email IDs allowed.</strong>
+				</div>}
+
+				{this.state.pass_alert && <div class="alert alert-warning">
+					<strong>Error! Passwords do not match. Please try again.</strong>
+				</div>}
+
+				{this.state.incomplete_alert && <div class="alert alert-danger">
+					<strong>Error! Something went wrong. Pelase try again in sometime.</strong>
+				</div>}
 				
 				<div className = "row">
 					<center> <h1 style = {{color : "#33a5ff"}}> <b>

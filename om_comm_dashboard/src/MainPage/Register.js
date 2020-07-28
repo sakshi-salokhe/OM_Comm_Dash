@@ -15,7 +15,11 @@ class Register extends Component
 			email : "",
 			name : "",
 			pass : "",
-			confirm_password : ""
+			confirm_password : "",
+			incomplete_alert : false,
+			wellnow_alert : false,
+			pass_alert : false,
+			somethingwrong_alert : false
 		}
 		
 		this.onchange = this.onchange.bind(this)
@@ -62,28 +66,35 @@ class Register extends Component
 		
 		if(obj.email.length === 0 || obj.pass.length === 0 || obj.name.length === 0 || obj.confirm_password.length === 0)
 		{
-			alert("Fields cannot be empty. Please fill out both the fields.");
+			this.setState({
+				incomplete_alert : true
+			})
 		}
 		else if(domain.toLowerCase() !== "wellnow.com")
 		{
-			alert("Only WellNow Emails Allowed!")
+			this.setState({
+				wellnow_alert : true
+			})
 		}
 		else
 		{
 			const confpassmatch = obj.confirm_password === obj.pass
 			if(confpassmatch === false)
 			{
-				alert("Passwords dont match. try again.")
+				this.setState({
+					pass_alert: true
+				})
 			}
 			else
 			{
 				axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/register.php', qs.stringify(obj))
 				.then(res => 
 					{
-						console.log("After registration:",res.data);
 						if(res.data.registered === "false")
 						{
-							alert("The email id you entered, already exists. Please try logging in or contact Sakshi.");
+							this.setState({
+								somethingwrong_alert : true
+							})
 							this.resetform();
 						}
 						else
@@ -102,6 +113,22 @@ class Register extends Component
 			<div className = "container">
 				<br />
 				<br />
+
+				{this.state.incomplete_alert && <div class="alert alert-danger">
+					<strong>Error! Please fill out all the required fields.</strong>
+				</div>}
+
+				{this.state.wellnow_alert && <div class="alert alert-warning">
+					<strong>Warning! Only WellNow Email IDs allowed.</strong>
+				</div>}
+
+				{this.state.pass_alert && <div class="alert alert-warning">
+					<strong>Error! Passwords do not match. Please try again.</strong>
+				</div>}
+
+				{this.state.incomplete_alert && <div class="alert alert-danger">
+					<strong>Error! The email id you entered, already exists. Please try logging in or click Forgot Password Link if you have forgotten your password.</strong>
+				</div>}
 				
 				<div className = "row">
 					<center> <h1 style = {{color : "#33a5ff"}}> <b>

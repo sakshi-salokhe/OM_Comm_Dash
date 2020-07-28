@@ -14,7 +14,9 @@ class ForgotPass extends Component
 		
 		this.state = 
 		{
-			email : ""
+			email : "",
+			incomplete_alert : false,
+			correctemail_alert : false
 		}
 		this.onchange = this.onchange.bind(this)
 		this.resetform = this.resetform.bind(this)
@@ -45,7 +47,10 @@ class ForgotPass extends Component
 		
 		if(obj.email.length === 0)
 		{
-			alert("Please enter you registered email address.");
+			//alert("Please enter you registered email address.");
+			this.setState({
+				incomplete_alert : true
+			})
 		}
 		else
 		{
@@ -54,7 +59,10 @@ class ForgotPass extends Component
 				{
 					if(res.data.status1 === "error")
 					{
-						alert("Enter your correct registered wellnow email address.");
+						//alert("Enter your correct registered wellnow email address.");
+						this.setState({
+							correctemail_alert : true
+						})
 						this.resetform();
 					}
 					else if(res.data.status1 === "success")
@@ -79,6 +87,14 @@ class ForgotPass extends Component
 			<div className = "container">
 				<br />
 				<br />
+
+				{this.state.incomplete_alert && <div class="alert alert-danger">
+					<strong>Error! Please fill out your registered email address.</strong>
+				</div>}
+
+				{this.state.correctemail_alert && <div class="alert alert-warning">
+					<strong>Warning! Please enter your correct registered email address.</strong>
+				</div>}
 				
 				<div className = "row">
 					<center> <h1 style = {{color : "#33a5ff"}}> <b>
