@@ -1,13 +1,10 @@
 import React, {Component} from "react"
 import ReactDOM from "react-dom"
 import axios from "axios"
-import qs from "qs"
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 import {Redirect} from "react-router"
 
 import AdminLogin from '../AdminLogin'
-import ViewDataTable from './ViewDataTable'
-
 
 class ViewTableRows extends Component
 {
@@ -16,7 +13,8 @@ class ViewTableRows extends Component
 		super(props)
 		this.state = 
 		{
-			redirect: false
+			redirect: false,
+			url1 : ""
 		};
 		
 		this.flag = this.flag.bind(this)
@@ -31,12 +29,13 @@ class ViewTableRows extends Component
 	
 	flag()
 	{
-		axios.get('http://localhost:81/OM_Comm_Dash/om_comm_backend/flag.php?comm_id='+this.props.obj.id)
+		axios.get('http://10.226.5.98:81/OM_Comm_Dash/om_comm_backend/flag.php?comm_id='+this.props.obj.id)
 		.then(
 			this.setState({ redirect: true })
 		)
 		.catch(err => console.log(err))
 	}
+	
 	
 	render()
 	{
@@ -52,7 +51,8 @@ class ViewTableRows extends Component
 				</Route>
 			</Router>)
 		}
-		console.log(this.props.obj);
+		
+		
 		const condition = this.props.obj.comm_flag === 1 || this.props.obj.comm_flag === '1';
 		const condition2 = this.props.obj.id === null;
 		
@@ -66,6 +66,9 @@ class ViewTableRows extends Component
 					</td>
 					<td>
 						{this.props.obj.ctype_name}
+					</td>
+					<td>
+						{this.props.obj.creason_name}
 					</td>
 					<td>
 						{this.props.obj.comm_notes}

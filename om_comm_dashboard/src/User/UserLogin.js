@@ -46,7 +46,7 @@ class UserLogin extends Component
 	
 	componentDidMount()
 	{
-		axios.get('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_username.php?user_id='+this.props.user_id)
+		axios.get('http://10.226.5.98:81/OM_Comm_Dash/om_comm_backend/get_username.php?user_id='+this.props.user_id)
 		.then(response => 
 		{
             this.setState({
@@ -65,7 +65,7 @@ class UserLogin extends Component
 				
 				<div className = "row">
 					<center> <h1 style = {{color : "#33a5ff"}}> <b>
-						Occ Med Communication Dashboard
+						Occ Med Communication Database
 					</b> </h1> </center>
 				</div>
 				

@@ -28,13 +28,13 @@ class FlaggedComms extends Component
 	
 	componentDidMount()
 	{
-		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/view_flagged_comms_user.php', qs.stringify(this.props.data))
+		axios.post('http://10.226.5.98:81/OM_Comm_Dash/om_comm_backend/view_flagged_comms_user.php', qs.stringify(this.props.data))
 		.then(res => 
 			{
 				this.setState({ comms: res.data });
 			})
 			
-		axios.get('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_username.php?user_id='+this.props.data.user_id)
+		axios.get('http://10.226.5.98:81/OM_Comm_Dash/om_comm_backend/get_username.php?user_id='+this.props.data.user_id)
 		.then(response => 
 		{
             this.setState({
@@ -60,7 +60,7 @@ class FlaggedComms extends Component
 	
 					<div className = "row">
 						<center> <h1 style = {{color : "#33a5ff"}}> <b>
-							Occ Med Communication Dashboard
+							Occ Med Communication Database
 						</b> </h1> </center>
 					</div>
 					
@@ -94,14 +94,15 @@ class FlaggedComms extends Component
 						<table className="table table-striped table-bordered" style={{marginTop: 20}}>
 							<thead>
 								<tr>
-									<th colSpan="5"> Employer Name: {this.props.emp_name} </th>
+									<th colSpan="6"> Employer Name: {this.props.emp_name} </th>
 								</tr>
 								<tr>
 									<th> Communication Date</th>
 									<th> User </th>
 									<th> Communication Type </th>
+									<th> Communication Reason </th>
 									<th> Attached File </th>
-									<th> Notes </th>
+									<th> Communication Notes </th>
 								</tr>
 							</thead>
 							<tbody>

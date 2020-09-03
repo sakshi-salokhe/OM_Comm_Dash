@@ -19,6 +19,8 @@ class Login extends Component
 		{
 			email : "",
 			pass : "",
+			incomplete_alert : false,
+			newuser_alert : false
 		}
 		this.onchange = this.onchange.bind(this)
 		this.resetform = this.resetform.bind(this)
@@ -51,16 +53,20 @@ class Login extends Component
 		
 		if(obj.email.length === 0 || obj.pass.length === 0)
 		{
-			alert("Email and Password cannot be empty. Please fill out both the fields.");
+			this.setState({
+				incomplete_alert : true
+			})
 		}
 		else
 		{
-			axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/login.php', qs.stringify(obj))
+			axios.post('http://10.226.5.98:81/OM_Comm_Dash/om_comm_backend/login.php', qs.stringify(obj))
 			.then(res => 
 				{
 					if(res.data.user_id === "-1")
 					{
-						alert("Something went wrong. If you are a new user, please register. If problem persists, contact Sakshi.");
+						this.setState({
+							newuser_alert : true
+						})
 						this.resetform();
 					}
 					else if(res.data.isAdmin === "1")
@@ -95,9 +101,17 @@ class Login extends Component
 				<br />
 				<br />
 				
+				{this.state.incomplete_alert && <div class="alert alert-danger">
+					<strong>Error! Please fill out all the email and password fields.</strong>
+				</div>}
+
+				{this.state.newuser_alert && <div class="alert alert-warning">
+					<strong>Warning! Something went wrong. If you are a new user, please register. If problem persists, contact Sakshi.</strong>
+				</div>}
+
 				<div className = "row">
 					<center> <h1 style = {{color : "#33a5ff"}}> <b>
-						Occ Med Communication Dashboard
+						Occ Med Communication Database
 					</b> </h1> </center>
 				</div>
 				

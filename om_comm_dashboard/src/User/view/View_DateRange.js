@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import qs from "qs"
 import axios from "axios"
-import moment from "moment"
 
 import UserLogin from '../UserLogin'
 import ViewDataTable from './ViewDataTable'
@@ -18,7 +17,8 @@ class View_DateRange extends Component
 			emps: [],
 			c_type : [],
 			empl: "",
-			username : ""
+			username : "",
+			danger_alert : false,
 		}
 		
 		this.onchange = this.onchange.bind(this)
@@ -50,7 +50,7 @@ class View_DateRange extends Component
 	
 	componentDidMount()
 	{
-		axios.get('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_emps.php')
+		axios.get('http://10.226.5.98:81/OM_Comm_Dash/om_comm_backend/get_emps.php')
 		.then(response => 
 		{
             this.setState({
@@ -58,7 +58,7 @@ class View_DateRange extends Component
 			})
 		})
 		
-		axios.get('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_username.php?user_id='+this.props.user_id)
+		axios.get('http://10.226.5.98:81/OM_Comm_Dash/om_comm_backend/get_username.php?user_id='+this.props.user_id)
 		.then(response => 
 		{
             this.setState({
@@ -76,13 +76,15 @@ class View_DateRange extends Component
 			empl : this.state.empl,
 		}
 		
-		if(obj.empl.length === 0)
+		if(obj.empl <= 1)
 		{
-			alert("Please choose an employer.");
+			this.setState({
+				danger_alert: true
+			})
 		}
 		else
 		{
-			axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_emp_name.php',qs.stringify(obj))
+			axios.post('http://10.226.5.98:81/OM_Comm_Dash/om_comm_backend/get_emp_name.php',qs.stringify(obj))
 			.then(response => 
 			{
 				ReactDOM.render(<FlaggedComms data = {obj} emp_name = {response.data.emp_name} />, document.getElementById('root'));
@@ -97,15 +99,19 @@ class View_DateRange extends Component
 		const obj = {
 			user_id : this.props.user_id,
 			empl : this.state.empl,
+			ctype : 1,
+			creason : 1
 		}
 		
-		if(obj.empl.length === 0)
+		if(obj.empl <= 1)
 		{
-			alert("Please choose an employer.");
+			this.setState({
+				danger_alert: true
+			})
 		}
 		else
 		{
-			axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_emp_name.php',qs.stringify(obj))
+			axios.post('http://10.226.5.98:81/OM_Comm_Dash/om_comm_backend/get_emp_name.php',qs.stringify(obj))
 			.then(response => 
 			{
 				ReactDOM.render(<ViewDataTable data = {obj} emp_name = {response.data.emp_name} />, document.getElementById('root'));
@@ -124,9 +130,13 @@ class View_DateRange extends Component
 				<br />
 				<br />
 				
+				{this.state.danger_alert && <div class="alert alert-danger">
+					<strong>Error! Please fill out all the required fields.</strong>
+				</div>}
+
 				<div className = "row">
 					<center> <h1 style = {{color : "#33a5ff"}}> <b>
-						Occ Med Communication Dashboard
+						Occ Med Communication Database
 					</b> </h1> </center>
 				</div>
 				
@@ -149,8 +159,8 @@ class View_DateRange extends Component
 						<form className="form-horizontal">
 							
 							<div className="form-group">
-								<label><b> Choose Employer </b> <br /></label>
-								<select className = "form-control" onChange = {this.onchange} name = "empl" value = {optionItems.emp_id}>
+								<label><b> Choose Employer *</b> <br /></label>
+								<select className = "form-control" onChange = {this.onchange} name = "empl" value = {optionItems.emp_id} style={{ borderColor: this.state.empl <=1 ? "#DC143C" : "#79CDCD" }}>
 									{optionItems}
 								</select>
 							</div>

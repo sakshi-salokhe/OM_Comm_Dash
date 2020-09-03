@@ -1,13 +1,10 @@
 import React, {Component} from "react"
 import ReactDOM from "react-dom"
 import axios from "axios"
-import qs from "qs"
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 import {Redirect} from "react-router"
 
 import View_DateRange from './View_DateRange'
-import ViewDataTable from './ViewDataTable'
-
 
 class ViewTableRows extends Component
 {
@@ -31,7 +28,7 @@ class ViewTableRows extends Component
 	
 	flag()
 	{
-		axios.get('http://localhost:81/OM_Comm_Dash/om_comm_backend/flag.php?comm_id='+this.props.obj.id)
+		axios.get('http://10.226.5.98:81/OM_Comm_Dash/om_comm_backend/flag.php?comm_id='+this.props.obj.id)
 		.then(
 			this.setState({ redirect: true })
 		)
@@ -55,7 +52,7 @@ class ViewTableRows extends Component
 		
 		const condition = this.props.obj.comm_flag === 1 || this.props.obj.comm_flag === '1';
 		const condition2 = this.props.obj.id === null;
-		console.log(this.props);
+		
 		return (
 				<tr style={{ backgroundColor: condition ? "#FED2D2" : "white" }}>
 					<td>
@@ -66,6 +63,9 @@ class ViewTableRows extends Component
 					</td>
 					<td>
 						{this.props.obj.ctype_name}
+					</td>
+					<td>
+						{this.props.obj.creason_name}
 					</td>
 					<td>
 						{this.props.obj.comm_notes}

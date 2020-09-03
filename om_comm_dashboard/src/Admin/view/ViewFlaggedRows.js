@@ -1,12 +1,7 @@
 import React, {Component} from "react"
 import ReactDOM from "react-dom"
-import axios from "axios"
-import qs from "qs"
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import {Redirect} from "react-router"
 
 import AdminLogin from '../AdminLogin'
-import FlaggedComms from './FlaggedComms'
 
 class ViewFlaggedRows extends Component
 {
@@ -37,6 +32,9 @@ class ViewFlaggedRows extends Component
 					</td>
 					<td>
 						{this.props.obj.ctype_name}
+					</td>
+					<td>
+						{this.props.obj.creason_name}
 					</td>
 					<td>
 						<a target = '_blank' href={this.props.obj.comm_file} > {this.props.obj.file_name} </a>

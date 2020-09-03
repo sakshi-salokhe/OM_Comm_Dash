@@ -21,7 +21,9 @@ class ViewDataTableAllEmps extends Component
 			show : false,
 			obj: [],
 			c_type : [],
-			ctype :"",
+			ctype : this.props.data.ctype,
+			creason : this.props.data.creason,
+			comm_reason_list : [],
 			emp_name : "",
 			username : "",
 			notes: "",
@@ -30,6 +32,7 @@ class ViewDataTableAllEmps extends Component
 		
 		this.onChange = this.onChange.bind(this);
 		this.onclickCommType = this.onclickCommType.bind(this);
+		this.onclickCommReason = this.onclickCommReason.bind(this);
 		
 		this.sort_date_asc = this.sort_date_asc.bind(this);
 		this.sort_date_desc = this.sort_date_desc.bind(this);
@@ -54,10 +57,11 @@ class ViewDataTableAllEmps extends Component
 			order: 'asc',
 			user : this.props.data.user,
 			start : this.props.data.start,
-			end: this.props.data.end
+			end: this.props.data.end,
+			creason : this.props.data.creason
 		}
 		
-		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_emp_name.php',qs.stringify(obj))
+		axios.post('http://10.226.5.98:81/OM_Comm_Dash/om_comm_backend/get_emp_name.php',qs.stringify(obj))
 		.then(response => 
 		{
 			this.setState({
@@ -65,7 +69,7 @@ class ViewDataTableAllEmps extends Component
 			})
 		})
 		
-		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/view_date_range_user_all_emps.php',qs.stringify(obj))
+		axios.post('http://10.226.5.98:81/OM_Comm_Dash/om_comm_backend/view_date_range_user_all_emps.php',qs.stringify(obj))
 		.then(response => 
 		{
 			ReactDOM.render(<ViewDataTableAllEmps1 data = {obj} />, document.getElementById('root'));
@@ -82,10 +86,11 @@ class ViewDataTableAllEmps extends Component
 			order: 'desc',
 			user : this.props.data.user,
 			start : this.props.data.start,
-			end: this.props.data.end
+			end: this.props.data.end,
+			creason : this.props.data.creason
 		}
 		
-		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_emp_name.php',qs.stringify(obj))
+		axios.post('http://10.226.5.98:81/OM_Comm_Dash/om_comm_backend/get_emp_name.php',qs.stringify(obj))
 		.then(response => 
 		{
 			this.setState({
@@ -93,7 +98,7 @@ class ViewDataTableAllEmps extends Component
 			})
 		})
 		
-		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/view_date_range_user_all_emps.php',qs.stringify(obj))
+		axios.post('http://10.226.5.98:81/OM_Comm_Dash/om_comm_backend/view_date_range_user_all_emps.php',qs.stringify(obj))
 		.then(response => 
 		{
 			ReactDOM.render(<ViewDataTableAllEmps1 data = {obj} />, document.getElementById('root'));
@@ -103,17 +108,37 @@ class ViewDataTableAllEmps extends Component
 	
 	onclickCommType(props)
 	{
-		
 		const obj = {
 			user_id : this.props.data.user_id,
 			empl : this.props.data.empl,
 			ctype : this.state.ctype,
 			user : this.props.data.user,
 			start : this.props.data.start,
-			end: this.props.data.end
+			end: this.props.data.end,
+			creason : this.props.data.creason
 		}
-			
-		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/view_date_range_user_all_emps.php',qs.stringify(obj))
+		
+		axios.post('http://10.226.5.98:81/OM_Comm_Dash/om_comm_backend/view_date_range_user_all_emps.php',qs.stringify(obj))
+		.then(response => 
+		{
+			ReactDOM.render(<ViewDataTableAllEmps1 data = {obj} />, document.getElementById('root'));
+		})
+		
+	}
+
+	onclickCommReason(props)
+	{
+		const obj = {
+			user_id : this.props.data.user_id,
+			empl : this.props.data.empl,
+			ctype : this.props.data.ctype,
+			user : this.props.data.user,
+			start : this.props.data.start,
+			end: this.props.data.end,
+			creason : this.state.creason
+		}
+		
+		axios.post('http://10.226.5.98:81/OM_Comm_Dash/om_comm_backend/view_date_range_user_all_emps.php',qs.stringify(obj))
 		.then(response => 
 		{
 			ReactDOM.render(<ViewDataTableAllEmps1 data = {obj} />, document.getElementById('root'));
@@ -128,7 +153,7 @@ class ViewDataTableAllEmps extends Component
 	
 	componentDidMount()
 	{
-		axios.post('http://localhost:81/OM_Comm_Dash/om_comm_backend/view_date_range_user_all_emps.php', qs.stringify(this.props.data))
+		axios.post('http://10.226.5.98:81/OM_Comm_Dash/om_comm_backend/view_date_range_user_all_emps.php', qs.stringify(this.props.data))
 		.then(res => 
 			{
 				this.setState({ 
@@ -137,7 +162,7 @@ class ViewDataTableAllEmps extends Component
 				});
 			})
 			
-		axios.get('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_com_type.php')
+		axios.get('http://10.226.5.98:81/OM_Comm_Dash/om_comm_backend/get_com_type.php')
 		.then(resp => 
 		{
             this.setState({
@@ -145,11 +170,19 @@ class ViewDataTableAllEmps extends Component
 			})
 		})
 		
-		axios.get('http://localhost:81/OM_Comm_Dash/om_comm_backend/get_username.php?user_id='+this.props.data.user_id)
+		axios.get('http://10.226.5.98:81/OM_Comm_Dash/om_comm_backend/get_username.php?user_id='+this.props.data.user_id)
 		.then(response => 
 		{
             this.setState({
 				username: response.data.name
+			})
+		})
+
+		axios.get('http://10.226.5.98:81/OM_Comm_Dash/om_comm_backend/get_comm_reason.php')
+		.then(resp => 
+		{
+            this.setState({
+				comm_reason_list: resp.data
 			})
 		})
 	}
@@ -166,7 +199,11 @@ class ViewDataTableAllEmps extends Component
 	{
 		let optionItems_ctype = this.state.c_type.map((c_type1) =>
                 <option key={c_type1.comm_type_id} value = {c_type1.comm_type_id}>{c_type1.comm_type_name}</option>
-            );
+			);
+		
+		let optionItems_reason = this.state.comm_reason_list.map((comm_reason1) =>
+			<option key={comm_reason1.comm_reason_id} value = {comm_reason1.comm_reason_id}>{comm_reason1.comm_reason_name}</option>
+		);
 		
 		return (
 				<div className = "container-fluid">
@@ -175,7 +212,7 @@ class ViewDataTableAllEmps extends Component
 					
 					<div className = "row">
 						<center> <h1 style = {{color : "#33a5ff"}}> <b>
-							Occ Med Communication Dashboard
+							Occ Med Communication Database
 						</b> </h1> </center>
 					</div>
 					
@@ -208,30 +245,40 @@ class ViewDataTableAllEmps extends Component
 					<table className="table table-striped table-bordered" id="table-to-xls" style={{marginTop: 20}}>
 						<thead>
 							<tr>
-								<td colSpan = "6">
+								<td colSpan = "8">
 									<div className="form-group">
 										<label><b> Total number of communications: </b> &nbsp;{this.state.count} </label>
 									</div>
 								</td>
 							</tr>
 							<tr>
-								<th colSpan="3">  </th>
+								<th colSpan="4"> Employer Names (Account Details) with background color red are in collection.</th>
 								<th colSpan="2">
-									<select className = "form-control" onChange = {this.onChange} name = "ctype" value = {optionItems_ctype.comm_type_id}>
+									<select className = "form-control" onChange = {this.onChange} name = "ctype" value = {this.state.ctype}>
 										{optionItems_ctype}
 									</select>
+									<br/>	
+									<button type="button" className="btn btn-warning" onClick = {this.onclickCommType} > Change Communication Type </button>
 								</th>
-								<th>
-									<button type="button" className="btn btn-warning" onClick = {this.onclickCommType} > Apply </button>
+								<th colSpan="2">
+									<select className = "form-control" onChange = {this.onChange} name = "creason" value = {this.state.creason}>
+										{optionItems_reason}
+									</select>
+									<br/>	
+									<button type="button" className="btn btn-warning" onClick = {this.onclickCommReason} > Change Communication Reason </button>
 								</th>
 							</tr>
 							
 							<tr>
-								<th> Date  <button type="button" className="btn btn-info" onClick = {this.sort_date_asc}> <FA name="arrow-up" /></button> &nbsp;<button type="button" className="btn btn-success" onClick = {this.sort_date_desc}> <FA name="arrow-down" /> </button> </th>
+								<th> Date <br/> 
+									<button type="button" className="btn btn-info btn-sm" onClick = {this.sort_date_asc}> <FA name="arrow-up"/></button>&nbsp;
+									<button type="button" className="btn btn-success btn-sm" onClick = {this.sort_date_desc}> <FA name="arrow-down"/></button>
+								</th>
 								<th> User </th>
 								<th> Employer Name </th>
 								<th> Communication Type </th>
-								<th> Notes </th>
+								<th> Communication Reason </th>
+								<th> Communication Notes </th>
 								<th> File Attached </th>
 								<th> Actions </th>
 							</tr>

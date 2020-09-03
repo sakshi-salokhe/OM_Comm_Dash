@@ -1,13 +1,10 @@
 import React, {Component} from "react"
 import ReactDOM from "react-dom"
 import axios from "axios"
-import qs from "qs"
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 import {Redirect} from "react-router"
 
 import AdminLogin from '../AdminLogin'
-import ViewDataTableAllEmps from './ViewDataTableAllEmps'
-
 
 class ViewTableRowsAllEmps extends Component
 {
@@ -31,7 +28,7 @@ class ViewTableRowsAllEmps extends Component
 	
 	flag()
 	{
-		axios.get('http://localhost:81/OM_Comm_Dash/om_comm_backend/flag.php?comm_id='+this.props.obj.id)
+		axios.get('http://10.226.5.98:81/OM_Comm_Dash/om_comm_backend/flag.php?comm_id='+this.props.obj.id)
 		.then(
 			this.setState({ redirect: true })
 		)
@@ -52,9 +49,8 @@ class ViewTableRowsAllEmps extends Component
 				</Route>
 			</Router>)
 		}
-		console.log(this.props.obj);
-		const condition = this.props.obj.comm_flag === 1 || this.props.obj.comm_flag === '1';
-		const condition2 = this.props.obj.id === null;
+		
+		const condition = this.props.obj.collections === 1 || this.props.obj.collections === '1';
 		
 		return (
 				<tr style={{ backgroundColor: condition ? "#FED2D2" : "white" }}>
@@ -71,13 +67,16 @@ class ViewTableRowsAllEmps extends Component
 						{this.props.obj.ctype_name}
 					</td>
 					<td>
+						{this.props.obj.creason_name}
+					</td>
+					<td>
 						{this.props.obj.comm_notes}
 					</td>
 					<td>
 						<a target = '_blank' href={this.props.obj.comm_file} > {this.props.obj.file_name} </a>
 					</td>
 					<td>
-						<button type="button" disabled = {condition2 || condition} className="btn btn-danger" onClick = {this.flag}> &nbsp; Mark Wrong &nbsp; </button>
+						<button type="button" className="btn btn-danger" onClick = {this.flag}> &nbsp; Flag communication &nbsp; </button>
 					</td>
 						
 				</tr>
