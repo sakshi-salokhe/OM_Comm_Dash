@@ -16,12 +16,14 @@ if(isset($postdata) && !empty($postdata))
 	$empl = $_POST['empl'];
 	$ctype = $_POST['ctype'];
 	$notes = $_POST['notes'];
+	$comm_response = $_POST['comm_response'];
+	$comm_reason = $_POST['comm_reason'];
 	//$file = $_POST['file'];
 	$flag = 0;
 	$date = date("Y-m-d");
 	
 	
-	$sql = "insert into communications(user_id, emp_id, comm_type_id, comm_date, comm_notes, comm_flag) values ('$user_id', '$empl', '$ctype', '$date', '$notes', '$flag')";
+	$sql = "insert into communications(user_id, emp_id, comm_type_id, comm_reason_id, comm_date, comm_response, comm_notes, comm_flag) values ('$user_id', '$empl', '$ctype', '$comm_reason', '$date', '$comm_response', '$notes', '$flag')";
 	
 	if(mysqli_query($con, $sql))
 	{

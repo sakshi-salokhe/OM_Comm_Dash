@@ -44,11 +44,20 @@ if(isset($postdata) && !empty($postdata))
 	
 	if(empty($_POST['ctype']) == True or $_POST['ctype'] == null)
 	{
-		$ctype = 0;
+		$ctype = 1;
 	}
 	else
 	{
 		$ctype = $_POST['ctype'];
+	}
+
+	if(empty($_POST['creason']) == True or $_POST['creason'] == null or $_POST['creason'] == 0)
+	{
+		$creason = 1;
+	}
+	else
+	{
+		$creason = $_POST['creason'];
 	}
 	
 	if(empty($_POST['order']) == True or $_POST['order'] == null)
@@ -59,135 +68,62 @@ if(isset($postdata) && !empty($postdata))
 	{
 		$order = $_POST['order'];
 	}
+
+	if($start == 0)
+	{
+		$q1 = mysqli_query($con, "CREATE OR REPLACE VIEW start_view AS SELECT * FROM communications where emp_id = '$empl' and comm_flag = 1");
+	}
+	else
+	{
+		$q1 = mysqli_query($con, "CREATE OR REPLACE VIEW start_view AS SELECT * FROM communications where emp_id = '$empl' and comm_date > '$start' and comm_flag = 1");
+	}
+
+	if($end == 0)
+	{
+		$q2 = mysqli_query($con, "CREATE OR REPLACE VIEW end_view AS SELECT * FROM start_view");
+	}
+	else
+	{
+		$q2 = mysqli_query($con, "CREATE OR REPLACE VIEW end_view AS SELECT * FROM start_view where comm_date < '$end'");
+	}
+
+	if($user == 0)
+	{
+		$q3 = mysqli_query($con, "CREATE OR REPLACE VIEW user_view AS SELECT * FROM end_view");
+	}
+	else
+	{
+		$q3 = mysqli_query($con, "CREATE OR REPLACE VIEW user_view AS SELECT * FROM end_view where user_id = '$user'");
+	}
+
+	if($ctype == 1)
+	{
+		$q4 = mysqli_query($con, "CREATE OR REPLACE VIEW ctype_view AS SELECT * FROM user_view");
+	}
+	else
+	{
+		$q4 = mysqli_query($con, "CREATE OR REPLACE VIEW ctype_view AS SELECT * FROM user_view where comm_type_id = '$ctype'");
+	}
+
+	if($creason == 1)
+	{
+		$q5 = mysqli_query($con, "CREATE OR REPLACE VIEW creason_view AS SELECT * FROM ctype_view");
+	}
+	else
+	{
+		$q5 = mysqli_query($con, "CREATE OR REPLACE VIEW creason_view AS SELECT * FROM ctype_view where comm_reason_id = '$creason'");
+	}
+
+	if($order == 'desc')
+	{
+		$q6 = mysqli_query($con, "CREATE OR REPLACE VIEW order_view AS SELECT * FROM creason_view order by comm_date desc");
+	}
+	else
+	{
+		$q6 = mysqli_query($con, "CREATE OR REPLACE VIEW order_view AS SELECT * FROM creason_view order by comm_date asc");
+	}
 	
-	if($start == 0 and $end == 0 and $user == 0 and $ctype == 0 and $order == 'asc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 order by comm_date asc";
-	}
-	else if($start == 0 and $end == 0 and $user == 0 and $ctype == 0 and $order == 'desc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 order by comm_date desc";
-	}
-	else if($start == 0 and $end == 0 and $user == 0 and $ctype != 0 and $order == 'asc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_type_id = '$ctype' order by comm_date asc";
-	}
-	else if($start == 0 and $end == 0 and $user == 0 and $ctype != 0 and $order == 'desc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_type_id = '$ctype' and comm_flag = 1 order by comm_date desc";
-	}
-	else if($start == 0 and $end == 0 and $user != 0 and $ctype == 0 and $order == 'asc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and user_id = '$user' order by comm_date asc";
-	}
-	else if($start == 0 and $end == 0 and $user != 0 and $ctype == 0 and $order == 'desc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and user_id = '$user' order by comm_date desc";
-	}
-	else if($start == 0 and $end == 0 and $user != 0 and $ctype != 0 and $order == 'asc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_type_id = '$ctype' and user_id = '$user' order by comm_date asc";
-	}
-	else if($start == 0 and $end == 0 and $user != 0 and $ctype != 0 and $order == 'desc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_type_id = '$ctype' and user_id = '$user' order by comm_date desc";
-	}
-	else if($start == 0 and $end != 0 and $user == 0 and $ctype == 0 and $order == 'asc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_date <= '$end' order by comm_date asc";
-	}
-	else if($start == 0 and $end != 0 and $user == 0 and $ctype == 0 and $order == 'desc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_date <= '$end' order by comm_date desc";
-	}
-	else if($start == 0 and $end != 0 and $user == 0 and $ctype != 0 and $order == 'asc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_date <= '$end' and comm_type_id = '$ctype' order by comm_date asc";
-	}
-	else if($start == 0 and $end != 0 and $user == 0 and $ctype != 0 and $order == 'desc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_date <= '$end' and comm_type_id = '$ctype' order by comm_date desc";
-	}
-	else if($start == 0 and $end != 0 and $user != 0 and $ctype == 0 and $order == 'asc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_date <= '$end' and user_id = '$user' order by comm_date asc";
-	}
-	else if($start == 0 and $end != 0 and $user != 0 and $ctype == 0 and $order == 'desc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_date <= '$end' and user_id = '$user' order by comm_date desc";
-	}
-	else if($start == 0 and $end != 0 and $user != 0 and $ctype != 0 and $order == 'asc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_date <= '$end' and user_id = '$user' and comm_type_id = '$ctype' order by comm_date asc";
-	}
-	else if($start == 0 and $end != 0 and $user != 0 and $ctype != 0 and $order == 'desc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_date <= '$end' and user_id = '$user' and comm_type_id = '$ctype' order by comm_date desc";
-	}
-	else if($start != 0 and $end == 0 and $user == 0 and $ctype == 0 and $order == 'asc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_date >= '$start' order by comm_date asc";
-	}
-	else if($start != 0 and $end == 0 and $user == 0 and $ctype == 0 and $order == 'desc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_date >= '$start' order by comm_date desc";
-	}
-	else if($start != 0 and $end == 0 and $user == 0 and $ctype != 0 and $order == 'asc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_date >= '$start' and comm_type_id = '$ctype' order by comm_date asc";
-	}
-	else if($start != 0 and $end == 0 and $user == 0 and $ctype != 0 and $order == 'desc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_date >= '$start' and comm_type_id = '$ctype' order by comm_date desc";
-	}
-	else if($start != 0 and $end == 0 and $user != 0 and $ctype == 0 and $order == 'asc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_date >= '$start' and user_id = '$user' order by comm_date asc";
-	}
-	else if($start != 0 and $end == 0 and $user != 0 and $ctype == 0 and $order == 'desc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_date >= '$start' and user_id = '$user' order by comm_date desc";
-	}
-	else if($start != 0 and $end == 0 and $user != 0 and $ctype != 0 and $order == 'asc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_date >= '$start' and user_id = '$user' and comm_type_id = '$ctype' order by comm_date asc";
-	}
-	else if($start != 0 and $end == 0 and $user != 0 and $ctype != 0 and $order == 'desc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_date >= '$start' and user_id = '$user' and comm_type_id = '$ctype' order by comm_date desc";
-	}
-	else if($start != 0 and $end != 0 and $user == 0 and $ctype == 0 and $order == 'asc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_date between '$start' and '$end' order by comm_date asc";
-	}
-	else if($start != 0 and $end != 0 and $user == 0 and $ctype == 0 and $order == 'desc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_date between '$start' and '$end' order by comm_date desc";
-	}
-	else if($start != 0 and $end != 0 and $user == 0 and $ctype != 0 and $order == 'asc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_type_id = '$ctype' and comm_date between '$start' and '$end' order by comm_date asc";
-	}
-	else if($start != 0 and $end != 0 and $user == 0 and $ctype != 0 and $order == 'desc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and comm_type_id = '$ctype' and comm_date between '$start' and '$end' order by comm_date desc";
-	}
-	else if($start != 0 and $end != 0 and $user != 0 and $ctype == 0 and $order == 'asc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and user_id = '$user' and comm_date between '$start' and '$end' order by comm_date asc";
-	}
-	else if($start != 0 and $end != 0 and $user != 0 and $ctype == 0 and $order == 'desc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and user_id = '$user' and comm_date between '$start' and '$end' order by comm_date desc";
-	}
-	else if($start != 0 and $end != 0 and $user != 0 and $ctype != 0 and $order == 'asc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and user_id = '$user' and comm_type_id = '$ctype' and comm_date between '$start' and '$end' order by comm_date asc";
-	}
-	else if($start != 0 and $end != 0 and $user != 0 and $ctype != 0 and $order == 'desc')
-	{
-		$sql = "select * from communications where emp_id = '$empl' and comm_flag = 1 and user_id = '$user' and comm_type_id = '$ctype' and comm_date between '$start' and '$end' order by comm_date desc";
-	}
+	$sql = "select * from order_view";
 	
 	if($res = mysqli_query($con, $sql))
 	{
@@ -199,6 +135,7 @@ if(isset($postdata) && !empty($postdata))
 			$emp[$c]['empl'] = $empl;
 			$empid1 = $row['emp_id'];
 			$ctypeid1 = $row['comm_type_id'];
+			$creasonid1 = $row['comm_reason_id'];
 			
 			$emp[$c]['comm_date'] = $row['comm_date'];
 			$emp[$c]['comm_notes'] = $row['comm_notes'];
@@ -212,19 +149,22 @@ if(isset($postdata) && !empty($postdata))
 			$emp_q = "select emp_name from employers where emp_id = '$empid1'";
 			$ctype_q = "select comm_type_name from comm_type where comm_type_id = '$ctypeid1'";
 			$user11 = "select name from users where user_id = '$userX'";
+			$creason_q = "select comm_reason_name from communication_reason where comm_reason_id = '$creasonid1'";
 			
 			$res1 = mysqli_query($con, $emp_q);
 			$res2 = mysqli_query($con, $ctype_q);
 			$res3 = mysqli_query($con, $user11);
+			$res4 = mysqli_query($con, $creason_q);
 			
 			$row1 = mysqli_fetch_assoc($res1);
 			$row2 = mysqli_fetch_assoc($res2);
 			$row3 = mysqli_fetch_assoc($res3);
-			
+			$row4 = mysqli_fetch_assoc($res4);
 			
 			$emp[$c]['emp_name'] = $row1['emp_name'];
 			$emp[$c]['ctype_name'] = $row2['comm_type_name'];
 			$emp[$c]['user'] = $row3['name'];
+			$emp[$c]['creason_name'] = $row4['comm_reason_name'];
 			
 			$c++;
 		}
@@ -245,6 +185,7 @@ if(isset($postdata) && !empty($postdata))
 			$emp[$c]['comm_flag'] = "";
 			$emp[$c]['emp_name'] = "";
 			$emp[$c]['ctype_name'] = "";
+			$emp[$c]['creason_name'] = "";
 			$emp[$c]['user'] = $user;
 			
 			echo json_encode($emp);

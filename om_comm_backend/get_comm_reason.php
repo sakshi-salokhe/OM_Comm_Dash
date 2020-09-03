@@ -7,15 +7,15 @@ session_start();
 
 $emp = [];
 
-$sql = "select comm_type_id, comm_type_name from comm_type";
+$sql = "select 	comm_reason_id, comm_reason_name from communication_reason";
 
 if($res = mysqli_query($con, $sql))
 {
 	$c = 0;
 	while($row = mysqli_fetch_assoc($res))
 	{
-		$emp[$c]['comm_type_id'] = $row['comm_type_id'];
-		$emp[$c]['comm_type_name'] = $row['comm_type_name'];
+		$emp[$c]['comm_reason_id'] = $row['comm_reason_id'];
+		$emp[$c]['comm_reason_name'] = $row['comm_reason_name'];
 		
 		$c++;
 	}
